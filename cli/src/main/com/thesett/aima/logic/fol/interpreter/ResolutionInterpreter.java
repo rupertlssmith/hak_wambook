@@ -332,7 +332,7 @@ public class ResolutionInterpreter<T, Q>
     /** Prints a welcome message. */
     private void printIntroduction()
     {
-        System.out.println("| LoJiX Prolog.");
+        System.out.println("| WAM Book Prolog.");
         System.out.println("| Copyright The Sett Ltd.");
         System.out.println("| Licensed under the Apache License, Version 2.0.");
         System.out.println("| //www.apache.org/licenses/LICENSE-2.0");
