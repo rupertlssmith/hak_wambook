@@ -1,0 +1,653 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>wambookbuild</artifactId>
+    <name>HAK_WAM_Book</name>
+    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+
+    <description>LoJiX is a framework for logic compilers and a Prolog implementation.</description>
+    <url>https://github.com/rupertlssmith/lojix</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>    
+    
+    <packaging>pom</packaging>
+
+    <scm>
+        <connection>scm:git:https://github.com/rupertlssmith/lojix.git</connection>
+        <url>https://github.com/rupertlssmith/lojix</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+
+        <!-- Set up for locally generated site. -->
+        <site>
+            <id>All_Projects_Site</id>
+            <name>All Projects Site</name>
+            <url>file:/var/www/build_reports/lojix</url>
+        </site>
+    </distributionManagement>    
+
+    <developers>
+        <developer>
+            <name>Rupert Smith</name>
+            <id>rupert</id>
+            <email>rupertgithub@badgerhouse.freeserve.co.uk</email>
+            <organization>The Sett Ltd.</organization>
+            <organizationUrl>http://www.thesett.com/</organizationUrl>
+        </developer>
+    </developers>
+    
+    <properties>
+        <projname>os_projects</projname>
+        <topdir>${basedir}/.</topdir>
+
+        <base.version>0.8.11-SNAPSHOT</base.version><!--base.version-->
+
+        <checkstyle.header.file>${topdir}/etc/license/license.txt</checkstyle.header.file>
+        <checkstyle.config>${topdir}/etc/coding_standards.xml</checkstyle.config>
+        <checkstyle.suppressions>${topdir}/etc/coding_standards_suppressions.xml</checkstyle.suppressions>
+
+        <findbugs.exclude.file>${topdir}/etc/findbugs-exclude.xml</findbugs.exclude.file>
+
+        <!-- Plugin versions. Attempting to standardize this for more repeatable builds. -->
+        <maven.compiler.plugin.version>2.0.1</maven.compiler.plugin.version>
+        <maven.dependency.plugin.version>2.0</maven.dependency.plugin.version>
+        <maven.assembly.plugin.version>2.2-beta-1</maven.assembly.plugin.version>
+        <maven.surefire.plugin.version>2.4.3</maven.surefire.plugin.version>
+        <jalopy.maven.plugin.version>1.9.4-250</jalopy.maven.plugin.version>
+        <maven.jaxb2.plugin.version>0.6.2</maven.jaxb2.plugin.version>
+        <xdoclet.maven.plugin.version>1.0</xdoclet.maven.plugin.version>
+        <maven.clover2.plugin.version>2.3.1</maven.clover2.plugin.version>
+        <maven.run.plugin.version>${base.version}</maven.run.plugin.version>
+        <maven.antrun.plugin.version>1.2-thesett</maven.antrun.plugin.version>
+        <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
+        <maven.war.plugin.version>2.0</maven.war.plugin.version>
+        <javacc.maven.plugin.version>2.1</javacc.maven.plugin.version>
+        <maven.dashboard.plugin.version>0.8.11-SNAPSHOT</maven.dashboard.plugin.version>
+        <maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
+        <maven.findbugs.plugin.version>2.5.3</maven.findbugs.plugin.version>
+        <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
+        <maven.checkstyle.plugin.version>2.2</maven.checkstyle.plugin.version>
+        <maven.jxr.plugin.version>2.1</maven.jxr.plugin.version>
+        <taglist.maven.plugin.version>2.2</taglist.maven.plugin.version>
+        <maven.surefire.report.plugin.version>2.4.3</maven.surefire.report.plugin.version>
+        <javancss.maven.plugin.version>2.0-beta-2</javancss.maven.plugin.version>
+        <maven.source.plugin.version>2.2.1</maven.source.plugin.version>
+        <maven.build.helper.plugin.version>1.3</maven.build.helper.plugin.version>
+        <jacoco.maven.plugin.version>0.6.4.201312101107</jacoco.maven.plugin.version>
+
+        <jstl.jar.version>1.1.2</jstl.jar.version>
+
+        <!--
+            Clover does not set up ${project.build.finalName} with its 'clover' classifier. The 'final.classifier' property
+            is empty by default, but should be included in the path of any custom modifications to final build artifacts,
+            for example, in antrun scripts. This is used when specifying archives to run cactus on.
+        -->
+        <final.classifier></final.classifier>
+
+        <pmd.ruleset.file>${topdir}/etc/pmd_rules.xml</pmd.ruleset.file>
+
+        <!-- Default build platform, can be overriden to win32 on the command line: -Dplatform=win32 -->
+        <platform>linux</platform>
+
+        <log4j.configuration>file:${topdir}/etc/log4j.xml</log4j.configuration>
+        <java.util.logging.config.file>${topdir}/etc/logging_to_log4j.properties</java.util.logging.config.file>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <sonar.language>java</sonar.language>
+        <sonar.jdbc.url>jdbc:mysql://localhost:3306/sonar</sonar.jdbc.url>
+        <sonar.jdbc.username>sonar</sonar.jdbc.username>
+        <sonar.jdbc.password>sonar</sonar.jdbc.password>
+        <sonar.projectKey>lojix</sonar.projectKey>
+        <sonar.projectName>LoJiX</sonar.projectName>
+    </properties>
+
+    <modules>
+        <module>interpreter</module>
+        <module>l0</module>
+        <module>l1</module>
+        <module>l2</module>
+        <module>l3</module>
+        <module>wam</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>[1.2.8,)</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <sourceDirectory>src/main</sourceDirectory>
+        <testSourceDirectory>src/unittests</testSourceDirectory>
+
+        <pluginManagement>
+            <plugins>
+
+                <!-- Ensures the compiler plugin is set up for Java 1.5 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                        <fork>false</fork>
+                    </configuration>
+                </plugin>
+
+                <!-- Ensure latest dependency plugin is used. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven.dependency.plugin.version}</version>
+                </plugin>
+
+                <!-- Fix the version of the assembly plugin. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven.assembly.plugin.version}</version>
+                </plugin>
+
+                <!-- Only run tests in files ending in Test.java, override the default set up. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                    <configuration>
+                        <argLine>${surefireArgLine}</argLine>
+                        <systemProperties>
+                            <property>
+                                <name>log4j.configuration</name>
+                                <value>${log4j.configuration}</value>
+                            </property>
+                            <property>
+                                <name>java.util.logging.config.file</name>
+                                <value>${java.util.logging.config.file}</value>
+                            </property>
+                        </systemProperties>
+                        <excludes>
+                            <exclude>**/Test*.java</exclude>
+                            <exclude>**/*TestCase.java</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+
+                <!-- For source code beautification. -->
+                <plugin>
+                    <groupId>triemax</groupId>
+                    <artifactId>jalopy-maven</artifactId>
+                    <version>${jalopy.maven.plugin.version}</version>
+                    <configuration>
+                        <profile>open_source</profile>
+                        <sources>
+                            <source>${basedir}/src/main</source>
+                            <source>${basedir}/src/unittests</source>
+                        </sources>
+                    </configuration>
+                </plugin>
+
+                <!-- Used to generate beans from XML schemas. -->
+                <plugin>
+                    <groupId>org.jvnet.jaxb2.maven2</groupId>
+                    <artifactId>maven-jaxb2-plugin</artifactId>
+                    <version>${maven.jaxb2.plugin.version}</version>
+                    <configuration>
+                        <schemaDirectory>${basedir}/src/resources</schemaDirectory>
+                    </configuration>
+                </plugin>
+
+                <!-- Set up clover to aggregate results over the whole codebase for all modules. -->
+                <plugin>
+                    <groupId>com.atlassian.maven.plugins</groupId>
+                    <artifactId>maven-clover2-plugin</artifactId>
+                    <version>${maven.clover2.plugin.version}</version>
+                    <configuration>
+                        <licenseLocation>${clover.license.path}</licenseLocation>
+                        <jdk>1.5</jdk>
+                        <includesTestSourceRoots>false</includesTestSourceRoots>
+                        <generateXml>true</generateXml>
+                        <generateHtml>true</generateHtml>
+                        <historyDir>${clover.history.path}</historyDir>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>instrument</goal>
+                                <goal>aggregate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!--
+                    Set up the run plugin to generate run scripts or invoke main methods. This configuration will generate
+                    a default run script called 'runj' in the target directory, that invoked java with the log4j.configuration
+                    parameter passed to it, and the projects complete runtime classpath set up.
+                -->
+                <plugin>
+                    <groupId>com.thesett</groupId>
+                    <artifactId>run-maven-plugin</artifactId>
+                    <version>${maven.run.plugin.version}</version>
+                    <configuration>
+                        <scriptOutDirectory>target</scriptOutDirectory>
+                        <systemproperties>
+                            <property>
+                                <name>log4j.configuration</name>
+                                <value>${log4j.configuration}</value>
+                            </property>
+                        </systemproperties>
+                        <commands>
+                            <runj/>
+                        </commands>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>script</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!--
+                    Configure idea plugin to exclude a standard set of directories under target.
+                    Prevents intellij scanning too much.
+                -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-idea-plugin</artifactId>
+                    <version>${maven.idea.plugin.version}</version>
+                    <configuration>
+                        <jdkLevel>1.5</jdkLevel>
+                        <downloadSources>true</downloadSources>
+                        <downloadJavadocs>true</downloadJavadocs>
+                        <!--<exclude>target/classes,target/site,target/clover,target/maven-archiver,target/surefire-reports,target/test-classes,aima,common,l0,l1,l2,prolog,vam,run-plugin</exclude>-->
+                    </configuration>
+                </plugin>
+
+                <!-- Set up the war plugin version to use. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                </plugin>
+
+                <!-- Set up the javacc plugin version to use. -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javacc-maven-plugin</artifactId>
+                    <version>${javacc.maven.plugin.version}</version>
+                </plugin>
+
+                <!-- Set up the build helper plugin version to use. -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${maven.build.helper.plugin.version}</version>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <!-- Set up the columns to display in the dashboard report. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>dashboard-maven-plugin</artifactId>
+                <version>${maven.dashboard.plugin.version}</version>
+                <configuration>
+                    <destinationFile>${project.reporting.outputDirectory}/maven-dashboard-report.html</destinationFile>
+                    <reports>
+                        <report>maven-surefire-report-plugin</report>
+                        <!--<report>maven-clover2-plugin</report>-->
+                        <report>jacoco-maven-plugin</report>
+                        <report>maven-checkstyle-plugin</report>
+                        <report>maven-pmd-plugin</report>
+                        <report>findbugs-maven-plugin</report>
+                        <report>taglist-maven-plugin</report>
+                        <report>javancss-maven-plugin</report>
+                    </reports>
+                    <columns>
+                        <maven-surefire-report-plugin>tests,errors,failures,successrate</maven-surefire-report-plugin>
+                        <maven-clover2-plugin>bar</maven-clover2-plugin>
+                        <maven-checkstyle-plugin>errors,warnings</maven-checkstyle-plugin>
+                        <maven-pmd-plugin>violations</maven-pmd-plugin>
+                        <findbugs-maven-plugin>violations</findbugs-maven-plugin>
+                        <javancss-maven-plugin>classes,ncss</javancss-maven-plugin>
+                    </columns>
+                </configuration>
+            </plugin>
+
+            <!-- Set the version of the findbugs plugin to use. Later versions get fussy with modules with no source. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugs.plugin.version}</version>
+            </plugin>
+
+            <!-- Set up the source plugin to always generate sources. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.maven.plugin.version}</version>
+                <executions>
+                <execution>
+                <id>pre-unit-test</id>
+                <goals>
+                <goal>prepare-agent</goal>
+                </goals>
+                <configuration>
+                <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                <propertyName>surefireArgLine</propertyName>
+                </configuration>
+                </execution>
+                <execution>
+                <id>post-unit-test</id>
+                <phase>test</phase>
+                <goals>
+                <goal>report</goal>
+                </goals>
+                <configuration>
+                <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+                <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                </configuration>
+                </execution>
+                <execution>
+                <id>report</id>
+                <phase>site</phase>
+                <goals>
+                <goal>report</goal>
+                </goals>
+                </execution>
+                </executions>
+                </plugin>
+            -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <reporting>
+        <plugins>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${maven.findbugs.plugin.version}</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <threshold>Low</threshold>
+                    <effort>Min</effort>
+                    <visitors>FindDeadLocalStores,UnreadFields</visitors>
+                    <excludeFilterFile>${findbugs.exclude.file}</excludeFilterFile>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven.pmd.plugin.version}</version>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <sourceEncoding>utf-8</sourceEncoding>
+                    <minimumTokens>50</minimumTokens>
+                    <targetJdk>1.5</targetJdk>
+                    <rulesets>
+                        <ruleset>${pmd.ruleset.file}</ruleset>
+                    </rulesets>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>pmd</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <configuration>
+                    <tags>
+                        <tag>
+                            <name>todo</name>
+                            <placement>a</placement>
+                            <head>To do:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <configuration>
+                    <configLocation>${checkstyle.config}</configLocation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven.jxr.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>${taglist.maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven.surefire.report.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <version>${maven.clover2.plugin.version}</version>
+                <configuration>
+                    <licenseLocation>${clover.license.path}</licenseLocation>
+                    <jdk>1.5</jdk>
+                    <includesTestSourceRoots>false</includesTestSourceRoots>
+                    <generateXml>true</generateXml>
+                    <generateHtml>true</generateHtml>
+                    <historyDir>${clover.history.path}</historyDir>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javancss-maven-plugin</artifactId>
+                <version>${javancss.maven.plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>dashboard-maven-plugin</artifactId>
+                <version>${maven.dashboard.plugin.version}</version>
+            </plugin>
+
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <!-- Build profile to build quickly without running tests. -->
+        <profile>
+            <id>skip</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+
+        <!-- Build profile to ignore test failures. -->
+        <profile>
+            <id>ignore</id>
+            <properties>
+                <maven.test.failure.ignore>true</maven.test.failure.ignore>
+                <maven.test.error.ignore>true</maven.test.error.ignore>
+            </properties>
+        </profile>
+
+        <!--
+            Build profile for running clover. Clover does not set up ${project.build.finalName} with its 'clover' classifier.
+            When building with clover this profile must be active so that builds that need to refer to the clovered final build
+            artifact can add in the needed classifier to refer to it. When this profile is not active the 'final.classifier'
+            property is empty. This is used when specifying archives to run cactus on.
+        -->
+        <profile>
+            <id>clover</id>
+            <properties>
+                <final.classifier>-clover</final.classifier>
+            </properties>
+        </profile>
+
+        <!--
+            Build profile to create the native libraries.
+        -->
+        <profile>
+            <id>native</id>
+            <modules>
+                <module>aima-native</module>
+            </modules>
+        </profile>
+
+        <!--
+            Build profile to run the integration tests.
+        -->
+        <profile>
+            <id>integration</id>
+            <modules>
+            </modules>
+        </profile>
+
+        <!--
+            Build profile to create the application packages.
+        -->
+        <profile>
+            <id>packages</id>
+            <modules>
+            </modules>
+        </profile>
+
+        <profile> 
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+    </profiles>
+
+</project>

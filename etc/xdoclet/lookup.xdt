@@ -1,0 +1,247 @@
+/* Copyright Rupert Smith, 2005, all rights reserved. */
+package <XDtPackage:packageOf><XDtEjbUtilObj:utilClass/></XDtPackage:packageOf>;
+
+import javax.naming.NamingException;
+
+/**
+ * This is a utility class for <XDtEjb:ejbName/> that provides convenience methods to lookup its home objects using JNDI.
+ *
+ * <p><table id="crc"><caption>CRC Card</caption>
+ * <tr><th> Responsibilities <th> Collaborations
+ * <tr><td> Look up home objects using JNDI.
+ * </table>
+ *
+ * @author Rupert Smith (author of XDoclet code generation template that generated this class)
+<XDtClass:classCommentTags indent="0"/> */
+public class <XDtClass:classOf><XDtEjbUtilObj:utilClass/></XDtClass:classOf>
+{
+<XDtConfig:ifConfigParamEquals paramName="cacheHomes" value="true">
+ <XDtEjbMdb:ifNotMessageDriven>
+  <XDtEjbIntf:ifRemoteEjb>
+    /** Used to hold a cached reference to the remote home object. */
+    private static <XDtEjbHome:homeInterface type="remote"/> cachedRemoteHome = null;
+
+  </XDtEjbIntf:ifRemoteEjb>
+  <XDtEjbIntf:ifLocalEjb>
+    /** Used to hold a cached reference to the local home object. */
+    private static <XDtEjbHome:homeInterface type="local"/> cachedLocalHome = null;
+
+  </XDtEjbIntf:ifLocalEjb>
+ </XDtEjbMdb:ifNotMessageDriven>
+ <XDtEjbMdb:ifMessageDriven>
+    /** Used to hold a cached reference to the message queue. */
+    private static javax.jms.Queue cachedQueue = null;
+   
+    /** Used to hold a cached reference to the queue connection factory. */
+    private static javax.jms.QueueConnectionFactory cachedConnectionFactory = null;
+    
+ </XDtEjbMdb:ifMessageDriven>
+</XDtConfig:ifConfigParamEquals>
+<XDtEjbMdb:ifMessageDriven>
+    /** Constant defining the JNDI name of the queue. */
+    private static final java.lang.String DESTINATION_JNDI_NAME="<XDtClass:classTagValue tagName="ejb:bean" paramName="destination-jndi-name"/>";
+
+    /** Constant defining the JNDI name of the queue connection factory. */
+    private static final java.lang.String CONNECTION_FACTORY_JNDI_NAME="<XDtClass:classTagValue tagName="ejb:bean" paramName="connection-factory-jndi-name"/>";
+
+    /**
+     * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_queue_def_ic"/>
+     * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="queue_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+    */
+   public static javax.jms.Queue getQueue() throws javax.naming.NamingException
+   {
+      <XDtConfig:ifConfigParamEquals paramName="cacheHomes" value="true">
+      if (cachedQueue == null) {
+         // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+         javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+         try {
+            java.lang.Object objRef = initialContext.lookup(DESTINATION_JNDI_NAME);
+            cachedQueue = (javax.jms.Queue) objRef;
+         } finally {
+            initialContext.close();
+         }
+      }
+      return cachedQueue;
+      </XDtConfig:ifConfigParamEquals>
+      <XDtConfig:ifConfigParamNotEquals paramName="cacheHomes" value="true">
+      // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+      javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+      try {
+         java.lang.Object objRef = initialContext.lookup(DESTINATION_JNDI_NAME);
+         return (javax.jms.Queue) objRef;
+      } finally {
+         initialContext.close();
+      }
+      </XDtConfig:ifConfigParamNotEquals>
+   }
+
+   /**
+    * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_queue_param_ic"/>
+    * @param environment <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_ic_parameters"/>
+    * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="queue_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+    */
+   public static javax.jms.Queue getQueue( java.util.Hashtable environment ) throws javax.naming.NamingException
+   {
+      // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+      javax.naming.InitialContext initialContext = new javax.naming.InitialContext(environment);
+      try {
+         java.lang.Object objRef = initialContext.lookup(DESTINATION_JNDI_NAME);
+         return (javax.jms.Queue) objRef;
+      } finally {
+         initialContext.close();
+      }
+   }
+
+   /**
+    * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_queue_def_ic"/>
+    * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="connection_factory_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+    */
+   public static javax.jms.QueueConnection getQueueConnection() throws javax.naming.NamingException, javax.jms.JMSException
+   {
+      <XDtConfig:ifConfigParamEquals paramName="cacheHomes" value="true">
+      if (cachedConnectionFactory == null) {
+         // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+         javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+         try {
+            java.lang.Object objRef = initialContext.lookup(CONNECTION_FACTORY_JNDI_NAME);
+            cachedConnectionFactory = (javax.jms.QueueConnectionFactory) objRef;
+         } finally {
+            initialContext.close();
+         }
+      }
+      return cachedConnectionFactory.createQueueConnection();
+      </XDtConfig:ifConfigParamEquals>
+      <XDtConfig:ifConfigParamNotEquals paramName="cacheHomes" value="true">
+      // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+      javax.naming.InitialContext initialContext = new javax.naming.InitialContext();
+      try {
+         java.lang.Object objRef = initialContext.lookup(CONNECTION_FACTORY_JNDI_NAME);
+         return ((javax.jms.QueueConnectionFactory) objRef).createQueueConnection();
+      } finally {
+         initialContext.close();
+      }
+      </XDtConfig:ifConfigParamNotEquals>
+   }
+
+   /**
+    * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_queue_param_ic"/>
+    * @param environment <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_ic_parameters"/>
+    * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="connection_factory_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+    */
+   public static javax.jms.QueueConnection getQueueConnection( java.util.Hashtable environment ) throws javax.naming.NamingException, javax.jms.JMSException
+   {
+      // <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_ic"/>
+      javax.naming.InitialContext initialContext = new javax.naming.InitialContext(environment);
+      try {
+         java.lang.Object objRef = initialContext.lookup(CONNECTION_FACTORY_JNDI_NAME);
+         return ((javax.jms.QueueConnectionFactory) objRef).createQueueConnection();
+      } finally {
+         initialContext.close();
+      }
+   }   
+</XDtEjbMdb:ifMessageDriven>
+<XDtEjbMdb:ifNotMessageDriven>
+   /**
+    * Looks up a home object on jndi and uses portable remote object to narrow it to the specified class. The environment parameters are
+    * passed to the initial jndi context when creating it.
+    *
+    * @param environment holds a set of properties to be passed to JNDI when creating the initial context to look up in.
+    * @param jndiName the JNDI name of the home obejct to look up.
+    * @param narrowTo the class of the home object that is being looked up, used to narrow the object returned by JNDI.
+    * @throws NamingException if the jndiName cannot be looked up.
+    */
+    private static Object lookupHome(java.util.Hashtable environment, String jndiName, Class narrowTo) 
+        throws javax.naming.NamingException
+    {
+        // Create the lookup context, passing in any parameters that were passed to this method
+        javax.naming.InitialContext initialContext = new javax.naming.InitialContext(environment);
+
+        // Use a try block as JNDI lookup may fail
+        try 
+        {
+            Object objRef = initialContext.lookup(jndiName);
+            
+            // Only narrow if necessary
+            if (narrowTo.isInstance(java.rmi.Remote.class))
+            {
+                return javax.rmi.PortableRemoteObject.narrow(objRef, narrowTo);
+            }
+            else
+            {
+                return objRef;
+            }
+        }
+        // This finally block ensures that the JNDI context is closed even if there were errors
+        finally
+        {
+            initialContext.close();
+        }
+    }
+
+    <XDtEjbIntf:ifRemoteEjb>
+    /**
+     * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_home_def_ic"/>
+     *
+     * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="home_interface_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+     */
+    public static <XDtEjbHome:homeInterface type="remote"/> getHome()
+        throws javax.naming.NamingException
+    {
+        <XDtConfig:ifConfigParamEquals paramName="cacheHomes" value="true">
+        if (cachedRemoteHome == null)
+        {
+            cachedRemoteHome =
+                (<XDtEjbHome:homeInterface type="remote"/>)lookupHome(null, <XDtEjbHome:homeInterface type="remote"/>.<XDtEjbUtilObj:lookupKind/>,
+                                                                      <XDtEjbHome:homeInterface type="remote"/>.class);
+        }
+
+        return cachedRemoteHome;
+        </XDtConfig:ifConfigParamEquals>
+
+        <XDtConfig:ifConfigParamNotEquals paramName="cacheHomes" value="true">
+        return (<XDtEjbHome:homeInterface type="remote"/>)
+            lookupHome(null, <XDtEjbHome:homeInterface type="remote"/>.<XDtEjbUtilObj:lookupKind/>,
+                       <XDtEjbHome:homeInterface type="remote"/>.class);
+        </XDtConfig:ifConfigParamNotEquals>
+    }
+
+    /**
+     * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_home_param_ic"/>
+     *
+     * @param environment <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_ic_parameters"/>
+     * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="home_interface_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+     */
+    public static <XDtEjbHome:homeInterface type="remote"/> getHome(java.util.Hashtable environment)
+        throws javax.naming.NamingException
+    {
+       return (<XDtEjbHome:homeInterface type="remote"/>)
+           lookupHome(environment, <XDtEjbHome:homeInterface type="remote"/>.<XDtEjbUtilObj:lookupKind/>,
+                      <XDtEjbHome:homeInterface type="remote"/>.class);
+    }
+    </XDtEjbIntf:ifRemoteEjb>
+
+    <XDtEjbIntf:ifLocalEjb>
+    /**
+     * <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_obtain_localhome_def_ic"/>
+     * @return <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="local_home_interface_for" arguments="<XDtEjb:ejbName/>"/> <XDtI18n:getString bundle="xdoclet.modules.ejb.XDocletModulesEjbMessages" resource="util_lookup_using" arguments="<XDtEjbUtilObj:lookupKind/>"/>
+     */
+    public static <XDtEjbHome:homeInterface type="local"/> getLocalHome()
+        throws javax.naming.NamingException
+    {
+        <XDtConfig:ifConfigParamEquals paramName="cacheHomes" value="true">
+        if (cachedLocalHome == null)
+        {
+            cachedLocalHome = (<XDtEjbHome:homeInterface type="local"/>) lookupHome(null, <XDtEjbHome:homeInterface type="local"/>.<XDtEjbUtilObj:lookupKind/>, <XDtEjbHome:homeInterface type="local"/>.class);
+        }
+        
+        return cachedLocalHome;
+        </XDtConfig:ifConfigParamEquals>
+        <XDtConfig:ifConfigParamNotEquals paramName="cacheHomes" value="true">
+        return (<XDtEjbHome:homeInterface type="local"/>)
+            lookupHome(null, <XDtEjbHome:homeInterface type="local"/>.<XDtEjbUtilObj:lookupKind/>,
+                       <XDtEjbHome:homeInterface type="local"/>.class);
+        </XDtConfig:ifConfigParamNotEquals>
+    }
+    </XDtEjbIntf:ifLocalEjb>
+</XDtEjbMdb:ifNotMessageDriven>
+}

@@ -1,0 +1,149 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>aima_native</artifactId>
+    <name>aima-native-win32</name>
+    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+
+    <description>Native implementations for AIMA for Windows.</description>
+    <url>https://www.thesett.com/build_reports/lojix/aima-native/win32</url>
+
+    <packaging>dll</packaging>
+
+    <properties>
+        <topdir>${basedir}/../..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>aima-native-build</artifactId>
+        <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <!-- This dependency cannot be inherited from the parent pom because it is specifically for the 'tests' classifier. -->
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>logic</artifactId>
+            <classifier>tests</classifier>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l0</artifactId>
+            <classifier>tests</classifier>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l1</artifactId>
+            <classifier>tests</classifier>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l2</artifactId>
+            <classifier>tests</classifier>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Extract headers for native implementations using javah and compile the C code using cl.exe -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+
+                <configuration>
+
+                    <!-- javah options. -->
+                    <classNames>
+                        <className>
+                            com.thesett.aima.logic.fol.l0.L0UnifyingNativeMachine
+                        </className>
+                        <className>
+                            com.thesett.aima.logic.fol.l1.L1UnifyingNativeMachine
+                        </className>
+                        <className>
+                            com.thesett.aima.logic.fol.l2.L2ResolvingNativeMachine
+                        </className>
+                    </classNames>
+                    <javahOS>win32</javahOS>
+
+                    <!-- compiler options. -->
+                    <compilerProvider>msvc</compilerProvider>
+                    <compilerExecutable>cl</compilerExecutable>
+                    <envFactoryName>org.codehaus.mojo.natives.msvc.MSVC2005x86EnvFactory</envFactoryName>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>
+                            /O1 /Zi /MT /D _STATIC_CPPLIB /W3 /DNDEBUG /DWIN32 /DIAL /D_LITTLE_ENDIAN /D_X86_ /Dx86 /DWIN32_LEAN_AND_MEAN
+                        </compilerStartOption>
+                    </compilerStartOptions>
+
+                    <sources>
+                        <source>
+                            <directory>../src/c</directory>
+                            <includes>
+                                <include>l0machine.c</include>
+                                <include>l1machine.c</include>
+                                <include>l2machine.c</include>
+                            </includes>
+                        </source>
+                    </sources>
+
+                    <!-- linker options. -->
+                    <linkerStartOptions>
+                        <linkerStartOption>/dll /opt:REF /incremental:no /debug</linkerStartOption>
+                    </linkerStartOptions>
+
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>native-headers</id>
+                        <goals>
+                            <goal>javah</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>native-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>native-link</id>
+                        <goals>
+                            <goal>link</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+            <!-- Runs the unit tests with the path configured to pick up the native dll. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <path>${basedir}\target;${java.library.path}</path>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

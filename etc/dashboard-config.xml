@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+     
+<configuration version="1.0">
+    <sections>
+        <section id="surefire.summary" title="Surefire Report Summary" groupId="org.apache.maven.plugins" artifactId="maven-surefire-report-plugin"/>
+        <section id="clover.summary" title="Clover Report Summary" groupId="org.apache.maven.plugins" artifactId="maven-clover-plugin"/>
+        <section id="checkstyle.summary" title="Checkstyle Report Summary" groupId="org.apache.maven.plugins" artifactId="maven-checkstyle-plugin"/>
+    </sections>
+</configuration>

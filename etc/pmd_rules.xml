@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>My custom rule set.</description>
+
+    <rule ref="rulesets/basic.xml/EmptyCatchBlock"/>
+    <rule ref="rulesets/basic.xml/EmptyIfStmt"/>
+    <rule ref="rulesets/basic.xml/EmptyTryBlock"/>
+    <rule ref="rulesets/basic.xml/EmptyFinallyBlock"/>
+    <rule ref="rulesets/basic.xml/EmptySwitchStatements"/>
+    <rule ref="rulesets/basic.xml/JumbledIncrementer"/>
+    <rule ref="rulesets/basic.xml/ForLoopShouldBeWhileLoop"/>
+    <rule ref="rulesets/basic.xml/UnnecessaryConversionTemporary"/>
+    <rule ref="rulesets/basic.xml/OverrideBothEqualsAndHashcode"/>
+    <rule ref="rulesets/basic.xml/DoubleCheckedLocking"/>
+    <rule ref="rulesets/basic.xml/ReturnFromFinallyBlock"/>
+    <rule ref="rulesets/basic.xml/EmptySynchronizedBlock"/>
+    <rule ref="rulesets/basic.xml/UnnecessaryReturn"/>
+    <rule ref="rulesets/basic.xml/EmptyStaticInitializer"/>
+    <rule ref="rulesets/basic.xml/EmptyStatementNotInLoop"/>
+    <rule ref="rulesets/basic.xml/BooleanInstantiation"/>
+    <rule ref="rulesets/basic.xml/UnnecessaryFinalModifier"/>
+    <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray"/>
+    <rule ref="rulesets/basic.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
+    <rule ref="rulesets/basic.xml/UselessOperationOnImmutable"/>
+    <rule ref="rulesets/basic.xml/MisplacedNullCheck"/>
+    <rule ref="rulesets/basic.xml/UnusedNullCheckInEquals"/>
+    <rule ref="rulesets/basic.xml/BrokenNullCheck"/>
+    <rule ref="rulesets/basic.xml/BigIntegerInstantiation"/>
+    <rule ref="rulesets/basic.xml/AvoidUsingHardCodedIP"/>
+    <rule ref="rulesets/basic.xml/CheckResultSet"/>
+    <rule ref="rulesets/basic.xml/AvoidMultipleUnaryOperators"/>
+
+    <rule ref="rulesets/clone.xml"/>
+
+    <rule ref="rulesets/design.xml/SimplifyBooleanReturns"/>
+    <rule ref="rulesets/design.xml/SimplifyBooleanExpressions"/>
+    <rule ref="rulesets/design.xml/SwitchStmtsShouldHaveDefault"/>
+    <rule ref="rulesets/design.xml/FinalFieldCouldBeStatic"/>
+    <rule ref="rulesets/design.xml/OptimizableToArrayCall"/>
+    <rule ref="rulesets/design.xml/InstantiationToGetClass"/>
+    <!--<rule ref="rulesets/design.xml/MissingBreakInSwitch"/>-->
+    <rule ref="rulesets/design.xml/AvoidInstanceofChecksInCatchClause"/>
+    <!--<rule ref="rulesets/design.xml/CompareObjectsWithEquals"/>-->
+    <rule ref="rulesets/design.xml/PositionLiteralsFirstInComparisons"/>
+    <rule ref="rulesets/design.xml/UnnecessaryLocalBeforeReturn"/>
+    <rule ref="rulesets/design.xml/NonThreadSafeSingleton"/>
+    <rule ref="rulesets/design.xml/AvoidConstantsInterface"/>
+    <rule ref="rulesets/design.xml/UnsynchronizedStaticDateFormatter"/>
+    <rule ref="rulesets/design.xml/PreserveStackTrace"/>
+    <rule ref="rulesets/design.xml/UseCollectionIsEmpty"/>
+    <rule ref="rulesets/design.xml/SingularField"/>
+
+    <rule ref="rulesets/migrating.xml/ReplaceVectorWithList"/>
+    <rule ref="rulesets/migrating.xml/ReplaceHashtableWithMap"/>
+    <rule ref="rulesets/migrating.xml/ReplaceEnumerationWithIterator"/>
+    <rule ref="rulesets/migrating.xml/IntegerInstantiation"/>
+    <rule ref="rulesets/migrating.xml/ByteInstantiation"/>
+    <rule ref="rulesets/migrating.xml/ShortInstantiation"/>
+    <rule ref="rulesets/migrating.xml/LongInstantiation"/>
+
+    <rule ref="rulesets/typeresolution.xml/LooseCoupling"/>
+    <rule ref="rulesets/typeresolution.xml/CloneMethodMustImplementCloneable"/>
+    <rule ref="rulesets/typeresolution.xml/UnusedImports"/>
+
+    <!-- These are already being trapped by FindBugs. -->
+    <!--
+    <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable"/>
+    <rule ref="rulesets/unusedcode.xml/UnusedPrivateField"/>
+    <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod"/>
+    -->
+
+    <rule ref="rulesets/strictexception.xml/AvoidCatchingThrowable"/>
+    <rule ref="rulesets/strictexception.xml/ExceptionAsFlowControl"/>
+    <rule ref="rulesets/strictexception.xml/AvoidThrowingNullPointerException"/>
+    <rule ref="rulesets/strictexception.xml/AvoidRethrowingException"/>
+    <rule ref="rulesets/strictexception.xml/DoNotExtendJavaLangError"/>
+    <rule ref="rulesets/strictexception.xml/DoNotThrowExceptionInFinally"/>
+
+</ruleset>

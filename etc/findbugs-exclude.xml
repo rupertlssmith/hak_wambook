@@ -1,0 +1,14 @@
+<FindBugsFilter>
+    <Match>
+        <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
+    </Match>
+
+    <Match>
+        <Bug pattern="DLS_DEAD_LOCAL_STORE_OF_NULL"/>
+    </Match>
+
+    <Match>
+        <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR"/>
+    </Match>
+
+</FindBugsFilter>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
+<module name="Checker">
+
+    <!-- Set up suppressions for more leniency on test code. -->
+    <!--
+        <module name="SuppressionFilter">
+        <property name="file" value="${checkstyle.suppressions.file}"/>
+        </module>
+    -->
+
+    <!-- Checks package.html defined for all packages. -->
+    <!-- <module name="PackageHtml"/> -->
+
+    <module name="TreeWalker">
+
+        <!-- Whitespace conventions. -->
+        <module name="TabCharacter"/>
+
+        <module name="GenericIllegalRegexp">
+            <property name="format" value="\s$"/>
+        </module>
+
+        <!-- License conventions. Checks that the license is included in every file. -->
+        <module name="Header">
+            <property name="headerFile" value="${checkstyle.header.file}"/>
+        </module>
+
+        <!-- Coding style conventions. -->
+        <module name="PackageDeclarationCheck">
+            <property name="severity" value="error"/>
+        </module>
+
+        <!-- These rules ensure that everything is javadoc'ed. -->
+        <module name="RequiredRegexp">
+            <property name="format" value="&lt;table id=&quot;crc&quot;&gt;&lt;caption&gt;CRC Card&lt;/caption&gt;"/>
+        </module>
+
+        <module name="JavadocTypeCheck">
+            <property name="authorFormat" value="^[a-zA-Z\:\ \.\$]*$"/>
+            <property name="excludeScope" value="nothing"/>
+            <property name="scope" value="private"/>
+            <property name="severity" value="error"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF"/>
+            <property name="allowMissingParamTags" value="true"/>
+        </module>
+        
+        <module name="JavadocVariableCheck">
+            <property name="excludeScope" value="nothing"/>
+            <property name="scope" value="private"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="JavadocMethodCheck">
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+            <property name="allowMissingThrowsTags" value="false"/>
+            <property name="allowThrowsTagsForSubclasses" value="true"/>
+            <property name="allowUndeclaredRTE" value="true"/>
+            <property name="allowMissingJavadoc" value="false"/>
+            <property name="excludeScope" value="nothing"/>
+            <property name="scope" value="private"/>
+            <property name="severity" value="error"/>
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+        </module>
+        
+        <module name="JavadocStyle">
+            <property name="scope" value="private"/>
+            <property name="checkHtml" value="false"/>
+            <property name="checkFirstSentence" value="true"/>
+            <property name="checkEmptyJavadoc" value="true"/>
+        </module>
+
+        <!-- These rules enforce the conventions for the naming of variables. -->        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck">
+            <property name="format" value="^log$|^trace$|^console$|^[A-Z](_?[A-Z0-9]+)*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.LocalFinalVariableNameCheck">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck">
+            <property name="applyToPackage" value="true"/>
+            <property name="applyToPrivate" value="true"/>
+            <property name="applyToProtected" value="true"/>
+            <property name="applyToPublic" value="true"/>
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck">
+            <property name="format" value="^[a-z]+(\.[a-zA-Z][a-zA-Z0-9]*)*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.StaticVariableNameCheck">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <property name="severity" value="error"/>
+        </module>
+        
+        <module name="com.puppycrawl.tools.checkstyle.checks.naming.TypeNameCheck">
+            <property name="format" value="^[A-Z][a-zA-Z0-9_]*$"/>
+            <property name="severity" value="error"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF"/>
+        </module>
+
+        <!-- Toxicity checks adapted from http://erik.doernenburg.com/2008/11/how-toxic-is-your-code/ -->
+        <module name="AnonInnerLength">
+            <property name="max" value="35"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="FileLength">
+            <property name="max" value="1000"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="ExecutableStatementCount">
+            <property name="max" value="25"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="ParameterNumber">
+            <property name="max" value="6"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="MissingSwitchDefault">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="NestedTryDepth">
+            <property name="max" value="2"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="BooleanExpressionComplexity">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="10"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="30"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+    </module>
+</module>

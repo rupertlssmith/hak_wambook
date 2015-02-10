@@ -1,0 +1,128 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>aima-native-build</artifactId>
+    <name>aima-native</name>
+    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+
+    <description>Library of code developed from 'Artificial Intelligence a Modern Approach', Prentice Hall.</description>
+    <url>https://www.thesett.com/build_reports/lojix/aima-native</url>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>wambookbuild</artifactId>
+        <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modules>
+        <module>linux</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>logic</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l0</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l1</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l2</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>l3</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>native</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+        <!-- Test only dependencies. -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>add-win32-module</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>win32</value>
+                </property>
+            </activation>
+            <modules>
+                <module>win32</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>add-linux-x86-module</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>linux</value>
+                </property>
+            </activation>
+            <modules>
+                <module>linux</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>add-linux-llvm-x86-module</id>
+            <activation>
+                <property>
+                    <name>platform</name>
+                    <value>linux-llvm</value>
+                </property>
+            </activation>
+            <modules>
+                <module>linux-llvm</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+        </plugins>
+    </build>
+
+
+</project>

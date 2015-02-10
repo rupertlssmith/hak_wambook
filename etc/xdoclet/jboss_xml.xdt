@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="<XDtConfig:configParameterValue paramName='Xmlencoding'/>"?>
+<!DOCTYPE jboss PUBLIC "<XDtXml:publicId/>" "<XDtXml:systemId/>">
+
+<jboss>
+
+ <XDtMerge:merge file="jboss-security.xml">
+  <XDtConfig:ifHasConfigParam paramName="EnforceEjbRestrictions" optional="true">
+   <enforce-ejb-restrictions><XDtConfig:configParameterValue paramName="EnforceEjbRestrictions"/></enforce-ejb-restrictions>
+  </XDtConfig:ifHasConfigParam>
+  <XDtConfig:ifHasConfigParam paramName="SecurityDomain" optional="true">
+   <security-domain><XDtConfig:configParameterValue paramName="SecurityDomain"/></security-domain>
+  </XDtConfig:ifHasConfigParam>
+  <XDtConfig:ifHasConfigParam paramName="UnauthenticatedPrincipal" optional="true">
+   <unauthenticated-principal><XDtConfig:configParameterValue paramName="UnauthenticatedPrincipal"/></unauthenticated-principal>
+  </XDtConfig:ifHasConfigParam>
+ </XDtMerge:merge>
+
+   <enterprise-beans>
+
+  <XDtMerge:merge file="jboss-beans.xml">
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+  </XDtMerge:merge>
+
+   <XDtEjbEntity:forAllEntityBeans>
+    <XDtEjb:ifIsAConcreteEJBean>
+     <XDtMerge:merge file="jboss-{0}.xml"> 
+      <entity>
+         <ejb-name><XDtEjb:ejbName/></ejb-name>
+        <XDtEjb:ifRemoteEjb>
+         <jndi-name><XDtEjbHome:jndiName type="remote"/></jndi-name>
+        </XDtEjb:ifRemoteEjb>
+        <XDtEjb:ifLocalEjb>
+         <local-jndi-name><XDtEjbHome:jndiName type="local"/></local-jndi-name>
+        </XDtEjb:ifLocalEjb>
+        <XDtClass:ifHasClassTag tagName="jboss.read-only" paramName="read-only" paramNum="0">
+         <read-only><XDtClass:classTagValue tagName="jboss.read-only" paramName="read-only" paramNum="0"/></read-only>
+        </XDtClass:ifHasClassTag>
+        <XDtClass:ifHasClassTag tagName="jboss.container-configuration">
+         <configuration-name><XDtClass:classTagValue tagName="jboss.container-configuration" paramName="name"/></configuration-name>
+        </XDtClass:ifHasClassTag>
+          <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+           <XDtClass:ifHasClassTag tagName="jboss.invoker-proxy-binding">
+         <invoker-bindings>
+            <XDtClass:forAllClassTags tagName="jboss.invoker-proxy-binding">
+           <invoker>
+             <invoker-proxy-binding-name><XDtClass:classTagValue tagName="jboss.invoker-proxy-binding" paramName="name" mandatory="true"/></invoker-proxy-binding-name>
+           </invoker>
+            </XDtClass:forAllClassTags>
+         </invoker-bindings>
+           </XDtClass:ifHasClassTag>
+          </XDtConfig:ifConfigParamGreaterOrEquals>
+        <XDtClass:ifHasClassTag tagName="jboss.security-proxy">
+         <security-proxy><XDtClass:classTagValue tagName="jboss.security-proxy" paramName="name"/></security-proxy>
+        </XDtClass:ifHasClassTag>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifRemoteEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifRemoteEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>        
+        <XDtClass:forAllClassTags tagName="jboss.ejb-ref-jndi">
+         <ejb-ref>
+            <ejb-ref-name>ejb/<XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="ref-name"/></ejb-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtClass:forAllClassTags>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifLocalEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-local-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <local-jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></local-jndi-name>
+         </ejb-local-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifLocalEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>        
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+        <XDtClass:forAllClassTags tagName="jboss.ejb-local-ref">
+         <ejb-local-ref>
+            <ejb-ref-name>ejb/<XDtClass:classTagValue tagName="jboss.ejb-local-ref" paramName="ref-name"/></ejb-ref-name>
+            <local-jndi-name><XDtClass:classTagValue tagName="jboss.ejb-local-ref" paramName="jndi-name"/></local-jndi-name>
+         </ejb-local-ref>
+        </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+        
+        <XDtConfig:ifConfigParamNotGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <resource-ref>
+                     <res-ref-name><XDtEjbEnv:name paramName="name"/></res-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <resource-ref>
+                     <res-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></res-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamNotGreaterOrEquals>
+
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-ref>
+            <res-ref-name><XDtEjbEnv:name paramName="res-name,res-ref-name"/></res-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+
+        <XDtClass:forAllClassTags tagName="jboss.resource-ref">
+         <resource-ref>
+            <res-ref-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-ref-name"/></res-ref-name>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="resource-name">
+            <resource-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="resource-name"/></resource-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="jndi-name">
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="jndi-name"/></jndi-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="res-url">
+            <res-url><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-url"/></res-url>
+            </XDtClass:ifHasClassTag>
+         </resource-ref>
+         </XDtClass:forAllClassTags>
+         
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-env-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtEjbEnv:name paramName="name"/></resource-env-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-env-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+         
+         <XDtClass:forAllClassTags tagName="jboss.resource-env-ref">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="resource-env-ref-name" mandatory="true"/></resource-env-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="jndi-name" mandatory="true"/></jndi-name>
+         </resource-env-ref>
+         </XDtClass:forAllClassTags>
+         
+         <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtEjbEnv:name paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+         
+
+<XDtComment:comment>
+We can get away with including an empty method-attributes element for >= 3.2, as
+the DTD defines it as (method*), which may occur zero times.
+</XDtComment:comment>
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+        <method-attributes>
+        <XDtClass:forAllClassTags tagName="jboss.method-attributes">
+            <method>
+              <method-name><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="pattern"/></method-name>
+          <XDtClass:ifHasClassTag tagName="jboss.method-attributes" paramName="read-only">                    
+              <read-only><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+          </XDtClass:ifHasClassTag>
+          <XDtClass:ifHasClassTag tagName="jboss.method-attributes" paramName="transaction-timeout">                    
+                <transaction-timeout><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="transaction-timeout" /></transaction-timeout>          
+          </XDtClass:ifHasClassTag>
+            </method>
+        </XDtClass:forAllClassTags>
+        <XDtMethod:forAllMethods>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes">
+            <method>
+              <method-name><XDtEjbIntf:interfaceMethodName /></method-name>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes" paramName="read-only">                    
+              <read-only><XDtMethod:methodTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+          </XDtMethod:ifHasMethodTag>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes" paramName="transaction-timeout">                    
+                <transaction-timeout><XDtMethod:methodTagValue tagName="jboss.method-attributes" paramName="transaction-timeout" /></transaction-timeout>
+          </XDtMethod:ifHasMethodTag>
+            </method>
+          </XDtMethod:ifHasMethodTag>
+        </XDtMethod:forAllMethods> 
+        </method-attributes>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+
+      <XDtClass:ifHasClassTag tagName="jboss.clustered" superclasses="true">
+          <clustered><XDtClass:classTagValue tagName="jboss.clustered" paramName="cluster" default="true" values="true,false"/></clustered>
+          <XDtClass:ifHasClassTag tagName="jboss.cluster-config" superclasses="true">
+          <cluster-config>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="partition-name" superclasses="true">
+              <partition-name><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="partition-name"/></partition-name>
+              </XDtClass:ifHasClassTag>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="home-policy" superclasses="true">
+              <home-load-balance-policy><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="home-policy" superclasses="true"/></home-load-balance-policy>
+              </XDtClass:ifHasClassTag>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="bean-policy" superclasses="true">
+              <bean-load-balance-policy><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="bean-policy" superclasses="true"/></bean-load-balance-policy>
+            </XDtClass:ifHasClassTag>
+          </cluster-config>
+         </XDtClass:ifHasClassTag>
+      </XDtClass:ifHasClassTag> 
+
+<XDtComment:comment>
+For 3.0, method-attributes occurs in a different place in the entity element, and
+is defined as (method-name, read-only?)  Since there can only be one method-name,
+we'll assume it's defined with a single class level tag.  If you've got 20 methods,
+you're not going to define it on just one of them with a method level tag...
+</XDtComment:comment>
+        <XDtConfig:ifConfigParamEquals paramName="Version" value="3.0">
+        <XDtClass:ifHasClassTag tagName="jboss.method-attributes">
+        <method-attributes>
+              <method-name><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="pattern"/></method-name>
+              <read-only><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+        </method-attributes>
+        </XDtClass:ifHasClassTag>
+        </XDtConfig:ifConfigParamEquals>
+        <XDtClass:ifHasClassTag tagName="jboss.cache-invalidation" superclasses="true">
+         <cache-invalidation><XDtClass:classTagValue tagName="jboss.cache-invalidation" paramName="value" default="true" values="true,false" superclasses="true"/></cache-invalidation>
+            <XDtClass:ifHasClassTag tagName="jboss.cache-invalidation-config">
+         <cache-invalidation-config>
+                <XDtClass:ifHasClassTag tagName="jboss.cache-invalidation-config" paramName="invalidation-manager-name">
+             <invalidation-manager-name><XDtClass:classTagValue tagName="jboss.cache-invalidation-config" paramName="invalidation-manager-name"/></invalidation-manager-name>
+                </XDtClass:ifHasClassTag>
+                <XDtClass:ifHasClassTag tagName="jboss.cache-invalidation-config" paramName="invalidation-group-name">
+             <invalidation-group-name><XDtClass:classTagValue tagName="jboss.cache-invalidation-config" paramName="invalidation-group-name"/></invalidation-group-name>
+                </XDtClass:ifHasClassTag>
+         </cache-invalidation-config>
+            </XDtClass:ifHasClassTag>
+        </XDtClass:ifHasClassTag>        
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+        <XDtClass:forAllClassTags tagName="jboss.depends">
+        <depends><XDtClass:classTagValue tagName="jboss.depends" paramName="name"/></depends>
+        </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+      </entity>
+     </XDtMerge:merge> 
+    </XDtEjb:ifIsAConcreteEJBean> 
+   </XDtEjbEntity:forAllEntityBeans>
+
+   <XDtEjbSession:forAllSessionBeans>
+    <XDtEjb:ifIsAConcreteEJBean>
+     <XDtMerge:merge file="jboss-{0}.xml">
+      <session>
+         <ejb-name><XDtEjb:ejbName/></ejb-name>
+        <XDtEjb:ifRemoteEjb>
+         <jndi-name><XDtEjbHome:jndiName type="remote"/></jndi-name>
+        </XDtEjb:ifRemoteEjb>
+        <XDtEjb:ifLocalEjb>
+         <local-jndi-name><XDtEjbHome:jndiName type="local"/></local-jndi-name>
+        </XDtEjb:ifLocalEjb>
+        <XDtClass:ifHasClassTag tagName="jboss.container-configuration">
+         <configuration-name><XDtClass:classTagValue tagName="jboss.container-configuration" paramName="name"/></configuration-name>
+        </XDtClass:ifHasClassTag>
+          <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+           <XDtClass:ifHasClassTag tagName="jboss.invoker-proxy-binding">
+         <invoker-bindings>
+            <XDtClass:forAllClassTags tagName="jboss.invoker-proxy-binding">
+           <invoker>
+             <invoker-proxy-binding-name><XDtClass:classTagValue tagName="jboss.invoker-proxy-binding" paramName="name" mandatory="true"/></invoker-proxy-binding-name>
+           </invoker>
+            </XDtClass:forAllClassTags>
+         </invoker-bindings>
+           </XDtClass:ifHasClassTag>
+          </XDtConfig:ifConfigParamGreaterOrEquals>
+        <XDtClass:ifHasClassTag tagName="jboss.security-proxy">
+         <security-proxy><XDtClass:classTagValue tagName="jboss.security-proxy" paramName="name"/></security-proxy>
+        </XDtClass:ifHasClassTag>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifRemoteEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifRemoteEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>        
+        <XDtClass:forAllClassTags tagName="jboss.ejb-ref-jndi">
+         <ejb-ref>
+            <ejb-ref-name>ejb/<XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="ref-name"/></ejb-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtClass:forAllClassTags>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifLocalEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-local-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <local-jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></local-jndi-name>
+         </ejb-local-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifLocalEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>                
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+         <XDtClass:forAllClassTags tagName="jboss.ejb-local-ref">
+          <ejb-local-ref>
+            <ejb-ref-name>ejb/<XDtClass:classTagValue tagName="jboss.ejb-local-ref" paramName="ref-name"/></ejb-ref-name>
+            <local-jndi-name><XDtClass:classTagValue tagName="jboss.ejb-local-ref" paramName="jndi-name"/></local-jndi-name>
+          </ejb-local-ref>
+         </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>        
+        
+        <XDtConfig:ifConfigParamNotGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <resource-ref>
+                     <res-ref-name><XDtEjbEnv:name paramName="name"/></res-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <resource-ref>
+                     <res-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></res-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamNotGreaterOrEquals>
+
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-ref>
+            <res-ref-name><XDtEjbEnv:name paramName="res-name,res-ref-name"/></res-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+        
+        <XDtClass:forAllClassTags tagName="jboss.resource-ref">
+         <resource-ref>
+            <res-ref-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-ref-name"/></res-ref-name>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="resource-name">
+            <resource-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="resource-name"/></resource-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="jndi-name">
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="jndi-name"/></jndi-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="res-url">
+            <res-url><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-url"/></res-url>
+            </XDtClass:ifHasClassTag>
+         </resource-ref>
+         </XDtClass:forAllClassTags>
+         
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-env-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtEjbEnv:name paramName="name"/></resource-env-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-env-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+         
+         <XDtClass:forAllClassTags tagName="jboss.resource-env-ref">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="resource-env-ref-name" mandatory="true"/></resource-env-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="jndi-name" mandatory="true"/></jndi-name>
+         </resource-env-ref>
+         </XDtClass:forAllClassTags>
+         
+         <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtEjbEnv:name paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+         
+      <XDtClass:ifHasClassTag tagName="jboss.clustered" superclasses="true">
+          <clustered><XDtClass:classTagValue tagName="jboss.clustered" paramName="cluster" default="true" values="true,false"/></clustered>
+          <XDtClass:ifHasClassTag tagName="jboss.cluster-config" superclasses="true">
+          <cluster-config>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="partition-name" superclasses="true">
+              <partition-name><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="partition-name"/></partition-name>
+              </XDtClass:ifHasClassTag>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="home-policy" superclasses="true">
+              <home-load-balance-policy><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="home-policy" superclasses="true"/></home-load-balance-policy>
+              </XDtClass:ifHasClassTag>
+              <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="bean-policy" superclasses="true">
+              <bean-load-balance-policy><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="bean-policy" superclasses="true"/></bean-load-balance-policy>
+              </XDtClass:ifHasClassTag>
+              <XDtEjbSession:ifStatefulSession>
+                 <XDtClass:ifHasClassTag tagName="jboss.cluster-config" paramName="state-manager" superclasses="true">
+              <session-state-manager-jndi-name><XDtClass:classTagValue tagName="jboss.cluster-config" paramName="state-manager" superclasses="true"/></session-state-manager-jndi-name>
+                  </XDtClass:ifHasClassTag>
+              </XDtEjbSession:ifStatefulSession>
+          </cluster-config>
+          </XDtClass:ifHasClassTag>
+      </XDtClass:ifHasClassTag>
+
+<XDtComment:comment>
+Although in session beans, method-attributes occurs in the same place for both
+3.0 and 3.2, its definition is still different.  They're handled separately
+as that's easiest - I can just copy and paste both sections from above :-)
+</XDtComment:comment>
+        <XDtConfig:ifConfigParamEquals paramName="Version" value="3.0">
+        <XDtClass:ifHasClassTag tagName="jboss.method-attributes">
+        <method-attributes>
+              <method-name><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="pattern"/></method-name>
+              <read-only><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+        </method-attributes>
+        </XDtClass:ifHasClassTag>
+        </XDtConfig:ifConfigParamEquals>
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+        <method-attributes>
+        <XDtClass:forAllClassTags tagName="jboss.method-attributes">
+            <method>
+              <method-name><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="pattern"/></method-name>
+          <XDtClass:ifHasClassTag tagName="jboss.method-attributes" paramName="read-only">                    
+              <read-only><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+          </XDtClass:ifHasClassTag>
+          <XDtClass:ifHasClassTag tagName="jboss.method-attributes" paramName="transaction-timeout">                    
+                <transaction-timeout><XDtClass:classTagValue tagName="jboss.method-attributes" paramName="transaction-timeout" /></transaction-timeout>
+          </XDtClass:ifHasClassTag>
+            </method>
+        </XDtClass:forAllClassTags>
+        <XDtMethod:forAllMethods>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes">
+            <method>
+              <method-name><XDtEjbIntf:interfaceMethodName /></method-name>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes" paramName="read-only">                    
+              <read-only><XDtMethod:methodTagValue tagName="jboss.method-attributes" paramName="read-only" /></read-only>
+          </XDtMethod:ifHasMethodTag>
+          <XDtMethod:ifHasMethodTag tagName="jboss.method-attributes" paramName="transaction-timeout">                    
+                <transaction-timeout><XDtMethod:methodTagValue tagName="jboss.method-attributes" paramName="transaction-timeout" /></transaction-timeout>
+          </XDtMethod:ifHasMethodTag>
+            </method>
+          </XDtMethod:ifHasMethodTag>
+        </XDtMethod:forAllMethods> 
+        </method-attributes>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+          <XDtClass:forAllClassTags tagName="jboss.depends">
+            <depends><XDtClass:classTagValue tagName="jboss.depends" paramName="name"/></depends>
+          </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+
+      <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+        <XDtClass:forAllClassTags tagName="jboss.port-component">
+         <port-component>
+            <port-component-name><XDtClass:classTagValue tagName="jboss.port-component" paramName="name"/></port-component-name>
+          <XDtClass:ifHasClassTag tagName="jboss.port-component" paramName="uri">
+            <port-component-uri><XDtClass:classTagValue tagName="jboss.port-component" paramName="uri"/></port-component-uri>
+          </XDtClass:ifHasClassTag>
+          <XDtClass:ifHasClassTag tagName="jboss.port-component" paramName="auth-method"> 
+            <auth-method><XDtClass:classTagValue tagName="jboss.port-component" paramName="auth-method" values="BASIC,CLIENT-CERT"/></auth-method>
+          </XDtClass:ifHasClassTag>
+          <XDtClass:ifHasClassTag tagName="jboss.port-component" paramName="transport-guarantee">
+            <transport-guarantee><XDtClass:classTagValue tagName="jboss.port-component" paramName="transport-guarantee" values="NONE,INTEGRAL,CONFIDENTIAL"/></transport-guarantee>
+          </XDtClass:ifHasClassTag>
+         </port-component>
+        </XDtClass:forAllClassTags>
+      </XDtConfig:ifConfigParamGreaterOrEquals>
+      
+        <XDtClass:ifHasClassTag tagName="jboss.webservice">
+          <XDtClass:ifHasClassTag tagName="ejb.bean">
+            <port-component>
+              <port-component-name><XDtClass:classTagValue tagName="ejb.bean" paramName="name"/></port-component-name>
+    <XDtConfig:ifHasConfigParam paramName="WebServiceContextRoot" optional="true">
+              <port-component-uri><XDtConfig:configParameterValue paramName="WebServiceContextRoot"/>/<XDtClass:classTagValue tagName="ejb.bean" paramName="name"/></port-component-uri>
+    </XDtConfig:ifHasConfigParam>
+              <XDtClass:ifHasClassTag tagName="jboss.webservice" paramName="auth-method">
+              <auth-method><XDtClass:classTagValue tagName="jboss.webservice" paramName="auth-method"/></auth-method>
+              </XDtClass:ifHasClassTag>
+            </port-component>
+          </XDtClass:ifHasClassTag>
+        </XDtClass:ifHasClassTag>
+      </session>
+     </XDtMerge:merge>
+    </XDtEjb:ifIsAConcreteEJBean>
+   </XDtEjbSession:forAllSessionBeans>
+
+
+
+    <XDtConfig:ifConfigParamGreaterOrEquals paramName="EjbSpec" value="2.0">
+    <XDtEjbMdb:forAllMDBeans>
+    <XDtEjb:ifIsAConcreteEJBean>
+     <XDtMerge:merge file="jboss-{0}.xml">
+      <message-driven>
+         <ejb-name><XDtEjb:ejbName/></ejb-name>                       
+        <XDtClass:ifHasClassTag tagName="jboss.destination-jndi-name" paramName="name">
+         <destination-jndi-name><XDtClass:classTagValue tagName="jboss.destination-jndi-name" paramName="name"/></destination-jndi-name>
+        </XDtClass:ifHasClassTag>
+        <XDtClass:ifDoesntHaveClassTag tagName="jboss.destination-jndi-name" paramName="name">
+         <XDtClass:ifHasClassTag tagName="ejb.bean" paramName="destination-jndi-name">
+         <destination-jndi-name><XDtClass:classTagValue tagName="ejb.bean" paramName="destination-jndi-name"/></destination-jndi-name>
+         </XDtClass:ifHasClassTag>
+        </XDtClass:ifDoesntHaveClassTag>
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.0">
+        <XDtClass:ifHasClassTag tagName="jboss.subscriber" paramName="name">
+         <mdb-user><XDtClass:classTagValue tagName="jboss.subscriber" paramName="name"/></mdb-user>
+        </XDtClass:ifHasClassTag>
+        <XDtClass:ifHasClassTag tagName="jboss.subscriber" paramName="password">        
+         <mdb-passwd><XDtClass:classTagValue tagName="jboss.subscriber" paramName="password"/></mdb-passwd>
+        </XDtClass:ifHasClassTag>         
+        <XDtClass:ifHasClassTag tagName="jboss.subscriber" paramName="client-id">
+         <mdb-client-id><XDtClass:classTagValue tagName="jboss.subscriber" paramName="client-id"/></mdb-client-id>
+        </XDtClass:ifHasClassTag>
+        <XDtClass:ifHasClassTag tagName="jboss.subscriber" paramName="subscription-id">        
+         <mdb-subscription-id><XDtClass:classTagValue tagName="jboss.subscriber" paramName="subscription-id"/></mdb-subscription-id>
+        </XDtClass:ifHasClassTag>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+        <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+         <XDtClass:ifHasClassTag tagName="jboss.resource-adapter" paramName="name">
+         <resource-adapter-name><XDtClass:classTagValue tagName="jboss.resource-adapter" paramName="name"/></resource-adapter-name>
+         </XDtClass:ifHasClassTag>
+        </XDtConfig:ifConfigParamGreaterOrEquals>        
+        <XDtClass:ifHasClassTag tagName="jboss.container-configuration">
+         <configuration-name><XDtClass:classTagValue tagName="jboss.container-configuration" paramName="name"/></configuration-name>
+        </XDtClass:ifHasClassTag>
+          <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+           <XDtClass:ifHasClassTag tagName="jboss.invoker-proxy-binding">
+         <invoker-bindings>
+            <XDtClass:forAllClassTags tagName="jboss.invoker-proxy-binding">
+           <invoker>
+             <invoker-proxy-binding-name><XDtClass:classTagValue tagName="jboss.invoker-proxy-binding" paramName="name" mandatory="true"/></invoker-proxy-binding-name>
+           </invoker>
+            </XDtClass:forAllClassTags>
+         </invoker-bindings>
+           </XDtClass:ifHasClassTag>
+          </XDtConfig:ifConfigParamGreaterOrEquals>
+        <XDtClass:ifHasClassTag tagName="jboss.security-proxy">
+         <security-proxy><XDtClass:classTagValue tagName="jboss.security-proxy" paramName="name"/></security-proxy>
+        </XDtClass:ifHasClassTag>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifRemoteEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifRemoteEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>        
+        <XDtClass:forAllClassTags tagName="jboss.ejb-ref-jndi">
+         <ejb-ref>
+            <ejb-ref-name>ejb/<XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="ref-name"/></ejb-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.ejb-ref-jndi" paramName="jndi-name"/></jndi-name>
+         </ejb-ref>
+        </XDtClass:forAllClassTags>
+      <XDtEjbEnvEjbRef:forAllEjbRefs tagName="ejb.ejb-external-ref">
+       <XDtEjbEnvEjbRef:ifLocalEjbRef>
+        <XDtEjbEnvEjbRef:ifHasParam paramName="jndi-name">
+         <ejb-local-ref>
+            <ejb-ref-name><XDtEjbEnvEjbRef:name/></ejb-ref-name>
+            <local-jndi-name><XDtEjbEnvEjbRef:paramValue paramName="jndi-name"/></local-jndi-name>
+         </ejb-local-ref>
+        </XDtEjbEnvEjbRef:ifHasParam>
+       </XDtEjbEnvEjbRef:ifLocalEjbRef>
+      </XDtEjbEnvEjbRef:forAllEjbRefs>               
+        
+        <XDtConfig:ifConfigParamNotGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <resource-ref>
+                     <res-ref-name><XDtEjbEnv:name paramName="name"/></res-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <resource-ref>
+                     <res-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></res-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </resource-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamNotGreaterOrEquals>
+
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-ref>
+            <res-ref-name><XDtEjbEnv:name paramName="res-name,res-ref-name"/></res-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+        
+        <XDtClass:forAllClassTags tagName="jboss.resource-ref">
+         <resource-ref>
+            <res-ref-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-ref-name"/></res-ref-name>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="resource-name">
+            <resource-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="resource-name"/></resource-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="jndi-name">
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="jndi-name"/></jndi-name>
+            </XDtClass:ifHasClassTag>
+            <XDtClass:ifHasClassTag tagName="jboss.resource-ref" paramName="res-url">
+            <res-url><XDtClass:classTagValue tagName="jboss.resource-ref" paramName="res-url"/></res-url>
+            </XDtClass:ifHasClassTag>
+         </resource-ref>
+         </XDtClass:forAllClassTags>
+         
+       <XDtEjbEnv:forAllTags tagName="ejb.resource-env-ref">
+        <XDtEjbEnv:ifHasParam paramName="jndi-name">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtEjbEnv:name paramName="name"/></resource-env-ref-name>
+            <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+         </resource-env-ref>
+        </XDtEjbEnv:ifHasParam>
+       </XDtEjbEnv:forAllTags>
+         
+         <XDtClass:forAllClassTags tagName="jboss.resource-env-ref">
+         <resource-env-ref>
+            <resource-env-ref-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="resource-env-ref-name" mandatory="true"/></resource-env-ref-name>
+            <jndi-name><XDtClass:classTagValue tagName="jboss.resource-env-ref" paramName="jndi-name" mandatory="true"/></jndi-name>
+         </resource-env-ref>
+         </XDtClass:forAllClassTags>
+         
+         <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+            <XDtEjbEnv:forAllTags tagName="ejb.destination-ref">
+                <XDtEjbEnv:ifHasParam paramName="jndi-name">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtEjbEnv:name paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtEjbEnv:paramValue paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+                </XDtEjbEnv:ifHasParam>
+            </XDtEjbEnv:forAllTags>
+            <XDtClass:forAllClassTags tagName="jboss.destination-ref">
+                 <message-destination-ref>
+                     <message-destination-ref-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="name"/></message-destination-ref-name>
+                     <jndi-name><XDtClass:classTagValue tagName="jboss.destination-ref" paramName="jndi-name"/></jndi-name>
+                 </message-destination-ref>
+            </XDtClass:forAllClassTags>
+        </XDtConfig:ifConfigParamGreaterOrEquals>
+         
+         <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="3.2">
+          <XDtClass:forAllClassTags tagName="jboss.depends">
+         <depends><XDtClass:classTagValue tagName="jboss.depends" paramName="name"/></depends>
+          </XDtClass:forAllClassTags>
+         </XDtConfig:ifConfigParamGreaterOrEquals>
+      </message-driven>
+     </XDtMerge:merge>
+    </XDtEjb:ifIsAConcreteEJBean>
+    </XDtEjbMdb:forAllMDBeans>
+    </XDtConfig:ifConfigParamGreaterOrEquals>
+    
+    <XDtMerge:merge file="jboss-webservices.ent">
+    <!--
+      write a merge file jboss-webservices.ent for webservice-description 
+    -->
+    </XDtMerge:merge>
+
+   </enterprise-beans>
+
+  <XDtConfig:ifConfigParamGreaterOrEquals paramName="Version" value="4.0">
+   <XDtMerge:merge file="jboss-assembly-descriptor.xml">
+     <!--
+       To specify your own assembly descriptor info here, add a file to your
+       XDoclet merge directory called jboss-assembly-descriptor.xml that contains
+       the <assembly-descriptor></assembly-descriptor> markup.
+     -->
+   <assembly-descriptor>
+    <!-- message destinations -->
+    <XDtMerge:merge file="jboss-message-destinations.ent">
+     <!--
+       To specify additional message-destination elements, add a file in the merge
+       directory called jboss-message-destinations.ent that contains them.
+     -->
+    </XDtMerge:merge>
+    <XDtEjbMdb:forAllDestinations>    
+    <message-destination>
+     <message-destination-name><XDtEjbMdb:destinationName/></message-destination-name>
+     <jndi-name><XDtEjbMdb:destinationJndiName/></jndi-name>
+    </message-destination>
+    </XDtEjbMdb:forAllDestinations>
+    
+   </assembly-descriptor>
+   </XDtMerge:merge>
+  </XDtConfig:ifConfigParamGreaterOrEquals>
+   
+
+  <XDtMerge:merge file="jboss-resource-managers.xml">
+   <resource-managers>
+    <XDtEjb:forAllBeans>
+    <XDtEjb:ifIsAConcreteEJBean>
+     <XDtClass:forAllClassTags tagName="jboss.resource-manager">
+      <resource-manager>
+         <res-name><XDtClass:classTagValue tagName="jboss.resource-manager" paramName="res-man-name"/></res-name>
+         <res-jndi-name><XDtClass:classTagValue tagName="jboss.resource-manager" paramName="res-man-jndi-name"/></res-jndi-name>
+      </resource-manager>
+     </XDtClass:forAllClassTags>
+    </XDtEjb:ifIsAConcreteEJBean>
+    </XDtEjb:forAllBeans>
+   </resource-managers>
+  </XDtMerge:merge>
+
+
+  <XDtMerge:merge file="jboss-container.xml">
+  <!--
+    | for container settings, you can merge in jboss-container.xml
+    | this can contain <invoker-proxy-bindings/> and <container-configurations/>
+  -->
+  </XDtMerge:merge>
+
+</jboss>

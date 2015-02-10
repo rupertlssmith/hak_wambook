@@ -1,0 +1,39 @@
+=== Cut
+
+neck_cut or cut, ok to insert that correctly.
+get_depth a little annoying, as needs to be part of the clause prefix instructions. also complicated the assignment
+of permanent registers.
+
+=== Call
+
+Argument to call is built on the heap, or stack.
+
+Call is implemented as a procedure that takes the argument, and turns it into a call, that is built args on heap, assign
+argument registers, call.
+
+Is it necessary to build a complete copy of the arguments on the heap, or can an argument register be set to point into
+the existing structure?
+
+=== Unifies
+
+Create LHS as query parameters.
+Create RHS as program parameters.
+No call instruction, just run the 2 together.
+
+OR
+
+Implement as:
+
+=(X, X).
+\=(X, Y) :- \+(X = Y).
+
+=== Disjunction
+
+Does this complicate permanent register assignment? Yes, but use the same procedure to count the number of permanent
+registers, just include nested conjunctive/disjunctive top-level terms in the count.
+
+ Problems with current inline implementations:
+
+ try_me/retry_me Saves the argument registers of the current clause. In the inline case, another clause may have been
+called prior to this, in which case num_args is set wrong. Need num_args for this predicate, not any that might have
+been called in between.

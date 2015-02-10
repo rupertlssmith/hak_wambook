@@ -1,0 +1,15 @@
+#!/bin/sh
+CV=`cat current_version`
+echo Current version is $CV
+
+if [ -z "$1" ] ; then 
+   echo New version must be specified.
+   exit
+fi
+
+echo New version is $1
+SEDCMD="s/<version>$CV<\/version><!--lojix.version-->/<version>$1<\/version><!--lojix.version-->/"
+SEDCMDCV="s/$CV/$1/"
+
+find -L . -name 'pom.xml' | xargs sed -i $SEDCMD
+sed -i $SEDCMDCV current_version

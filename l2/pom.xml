@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thesett</groupId>
+    <artifactId>l2</artifactId>
+    <name>l2</name>
+    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+
+    <description>Implementation of the L0 machine described in  "Warren's Abstact Machine, A Tutorial Reconstruction, by Hassan Ait-Kaci"</description>
+    <url>https://www.thesett.com/build_reports/lojix/l2</url>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <topdir>${basedir}/..</topdir>
+    </properties>
+
+    <parent>
+        <groupId>com.thesett</groupId>
+        <artifactId>wambookbuild</artifactId>
+        <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>common</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--base.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>logic</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>interpreter</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>logic</artifactId>
+            <classifier>tests</classifier>
+            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        </dependency>
+
+        <!-- Test only dependencies. -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thesett</groupId>
+            <artifactId>base</artifactId>
+            <version>0.8.11-SNAPSHOT</version><!--base.version-->
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Make the unit tests available to other modules. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Set up the run plugin to generate command line scripts. -->
+            <plugin>
+                <groupId>com.thesett</groupId>
+                <artifactId>run-maven-plugin</artifactId>
+
+                <configuration>
+                    <scriptOutDirectory>target</scriptOutDirectory>
+                    <systemproperties>
+                        <property>
+                            <name>log4j.configuration</name>
+                            <value>${log4j.configuration}</value>
+                        </property>
+                    </systemproperties>
+                    <commands>
+                        <l2>com.thesett.aima.logic.fol.l2.L2JavaInterpreter</l2>
+                        <l2-native>com.thesett.aima.logic.fol.l2.L2NativeInterpreter</l2-native>
+                    </commands>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>script</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+    </plugins>
+  </build>
+
+</project>
