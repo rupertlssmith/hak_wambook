@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>interpreter</artifactId>
     <name>interpreter</name>
-    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+    <version>0.8.10</version><!--lojix.version-->
 
     <url>https://www.thesett.com/build_reports/lojix/interpreter</url>
 
@@ -17,7 +17,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>wambookbuild</artifactId>
-        <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        <version>0.8.10</version><!--lojix.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -25,20 +25,20 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>common</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--base.version-->
+            <version>0.8.10</version><!--base.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>logic</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>logic</artifactId>
             <classifier>tests</classifier>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>base</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--base.version-->
+            <version>0.8.10</version><!--base.version-->
             <scope>test</scope>
         </dependency>
 

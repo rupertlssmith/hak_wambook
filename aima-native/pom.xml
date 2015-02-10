@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>aima-native-build</artifactId>
     <name>aima-native</name>
-    <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+    <version>0.8.10</version><!--lojix.version-->
 
     <description>Library of code developed from 'Artificial Intelligence a Modern Approach', Prentice Hall.</description>
     <url>https://www.thesett.com/build_reports/lojix/aima-native</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>wambookbuild</artifactId>
-        <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+        <version>0.8.10</version><!--lojix.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,38 +30,38 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>logic</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l0</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l1</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l2</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l3</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
 
         <!--
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>native</artifactId>
-            <version>0.8.11-SNAPSHOT</version><!--lojix.version-->
+            <version>0.8.10</version><!--lojix.version-->
         </dependency>
         -->
 
