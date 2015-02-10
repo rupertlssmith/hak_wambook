@@ -5,6 +5,10 @@ This is an implementation of the family of logic compilers described in "Warren'
 
 A family of logic compilers is described in this book, starting from L0 which introduces unification, through L1, L2 and L3, which build up more of a Prolog implementation, leading the WAM, which is a more complete Prolog implementation.
 
+A copy of the WAM book, with errata, can be found here:
+    
+    https://github.com/a-yiorgos/wambook    
+
 Getting Started
 ---------------
 
@@ -33,7 +37,9 @@ Other Sources
 Some parts of the source are outside of this git repository, the Prolog parser in particular, as these are also used in other projects. Take a look at this repository if you want a copy of all of the sources:
 
     https://github.com/rupertlssmith/lojix
-    
-A copy of the WAM book, with errata, can be found here:
-    
-    https://github.com/a-yiorgos/wambook
+
+This is current built against version 0.8.11 of lojix, to get the sources for that version checkout its tag:
+
+    > git clone https://github.com/rupertlssmith/lojix.git
+    > cd lojix
+    > git checkout v0.8.11
