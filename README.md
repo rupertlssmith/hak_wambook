@@ -31,6 +31,17 @@ This work was originally produced in order for me to learn how such a compiler w
 
 This work may be of interest to students of compiler design. In addition to Prolog, you can find examples of parsers, and elements of a modular compiler design that are fairly "text book" in their nature.
 
+State of the work
+-----------------
+
+The languages L0 through L3 are complete as per the book.
+
+The WAM machine is missing the indexing scheme, and the implementation of cut. Part of the optimization based on memory ordering has also been missed out. These things may get completed at a later date, especially if someone were to contribute them.
+
+The languages L0 through L2 also have native byte code machines implemented in C. Given the state-of-the-art in Java compilations and virtual machines, these are unlikely to offer a performance advantage over the machines implemented in Java.
+
+The language L2 has a JIT compilation machine implemented on top of LLVM. This is not 100% complete, but provides a decent introduction to compiling down to native code.
+    
 Other Sources
 -------------
 
