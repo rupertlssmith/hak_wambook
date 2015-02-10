@@ -12,4 +12,4 @@ SEDCMD="s/<version>$CV<\/version><!--lojix.version-->/<version>$1<\/version><!--
 SEDCMDCV="s/$CV/$1/"
 
 find -L . -name 'pom.xml' | xargs sed -i $SEDCMD
-sed -i $SEDCMDCV lojix/lojix/current_version
+sed -i $SEDCMDCV lojix_current_version
