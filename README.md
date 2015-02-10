@@ -3,7 +3,7 @@ WAM Book Prolog
 
 This is an implementation of the family of logic compilers described in "Warren's Abstract Machine: A Tutorial Reconstruction" by Hassan Aït-Kaci.
 
-A family of logic compilers is described in this book, starting from L0 which introduces unification, through L1, L2 and L3, which build up more of a Prolog implementation, leading the WAM, which is a more complete Prolog implementation.
+A family of logic compilers is described in this book, starting from L0 which introduces unification, through L1, L2 and L3, which build up more of a Prolog implementation, leading the WAM, which is a more complete Prolog implementation and optimizes the simpler designs of the earlier languages.
 
 A copy of the WAM book, with errata, can be found here:
     
@@ -49,7 +49,7 @@ Some parts of the source are outside of this git repository, the Prolog parser i
 
     https://github.com/rupertlssmith/lojix
 
-This is current built against version 0.8.11 of lojix, to get the sources for that version checkout its tag:
+This is currently built against version 0.8.11 of lojix, to get the sources for that version checkout its tag:
 
     > git clone https://github.com/rupertlssmith/lojix.git
     > cd lojix
