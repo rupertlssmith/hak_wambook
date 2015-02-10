@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>aima_native</artifactId>
     <name>aima-native-win32</name>
-    <version>0.8.10</version><!--lojix.version-->
+    <version>0.8.11</version><!--lojix.version-->
 
     <description>Native implementations for AIMA for Windows.</description>
     <url>https://www.thesett.com/build_reports/lojix/aima-native/win32</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>aima-native-build</artifactId>
-        <version>0.8.10</version><!--lojix.version-->
+        <version>0.8.11</version><!--lojix.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,28 +28,28 @@
             <groupId>com.thesett</groupId>
             <artifactId>logic</artifactId>
             <classifier>tests</classifier>
-            <version>0.8.10</version><!--lojix.version-->
+            <version>0.8.11</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l0</artifactId>
             <classifier>tests</classifier>
-            <version>0.8.10</version><!--lojix.version-->
+            <version>0.8.11</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l1</artifactId>
             <classifier>tests</classifier>
-            <version>0.8.10</version><!--lojix.version-->
+            <version>0.8.11</version><!--lojix.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l2</artifactId>
             <classifier>tests</classifier>
-            <version>0.8.10</version><!--lojix.version-->
+            <version>0.8.11</version><!--lojix.version-->
         </dependency>
     </dependencies>
 

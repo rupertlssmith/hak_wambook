@@ -8,7 +8,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>wambookbuild</artifactId>
     <name>HAK_WAM_Book</name>
-    <version>0.8.10</version><!--lojix.version-->
+    <version>0.8.11</version><!--lojix.version-->
 
     <description>LoJiX is a framework for logic compilers and a Prolog implementation.</description>
     <url>https://github.com/rupertlssmith/lojix</url>
@@ -60,7 +60,7 @@
         <projname>os_projects</projname>
         <topdir>${basedir}/.</topdir>
 
-        <base.version>0.8.10</base.version><!--base.version-->
+        <base.version>0.8.11</base.version><!--base.version-->
 
         <checkstyle.header.file>${topdir}/etc/license/license.txt</checkstyle.header.file>
         <checkstyle.config>${topdir}/etc/coding_standards.xml</checkstyle.config>
@@ -82,7 +82,7 @@
         <maven.idea.plugin.version>2.2</maven.idea.plugin.version>
         <maven.war.plugin.version>2.0</maven.war.plugin.version>
         <javacc.maven.plugin.version>2.1</javacc.maven.plugin.version>
-        <maven.dashboard.plugin.version>0.8.10</maven.dashboard.plugin.version>
+        <maven.dashboard.plugin.version>0.8.11</maven.dashboard.plugin.version>
         <maven.pmd.plugin.version>2.4</maven.pmd.plugin.version>
         <maven.findbugs.plugin.version>2.5.3</maven.findbugs.plugin.version>
         <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
