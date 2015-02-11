@@ -15,6 +15,8 @@
  */
 package com.thesett.aima.logic.fol.wam.machine;
 
+import com.thesett.aima.logic.fol.CallAndNotResolverUnitTestBase;
+import com.thesett.aima.logic.fol.CutResolverUnitTestBase;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -279,10 +281,10 @@ public class WAMResolvingJavaMachineTest extends TestCase
                 "testVariableTakesBindingsFromTwoDisjunctionPaths", engine));
         suite.addTest(new DisjunctionResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
                 "testVariableTakesBindingsFromManyDisjunctionPaths", engine));
-        /*suite.addTest(new DisjunctionResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
-                "testJunctionBracketingFalse", engine));*/
-        /*suite.addTest(new DisjunctionResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
-                "testJunctionBracketingAllowsDisjunction", engine));*/
+        suite.addTest(new DisjunctionResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
+                "testJunctionBracketingFalse", engine));
+        suite.addTest(new DisjunctionResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
+                "testJunctionBracketingAllowsDisjunction", engine));
 
         // Add all tests defined in the BacktrackingResolverUnitTestBase class.
         suite.addTest(new BacktrackingResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
@@ -311,13 +313,13 @@ public class WAMResolvingJavaMachineTest extends TestCase
                 "testListIterationBacktracks", engine));
 
         // Add all tests defined in the CutResolverUnitTestBase class.
-        /*suite.addTest(new CutResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
+        suite.addTest(new CutResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
                 "testNeckCutPreventsBacktrackingOk", engine));
         suite.addTest(new CutResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
-                "testDeepCutPreventsBacktrackingOk", engine));*/
+                "testDeepCutPreventsBacktrackingOk", engine));
 
         // Add all tests defined in the CallAndNotResolverUnitTestBase class.
-        /*suite.addTest(new CallAndNotResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
+        suite.addTest(new CallAndNotResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
                 "testSimpleCallOk", engine));
         suite.addTest(new CallAndNotResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
                 "testCallFunctorWithArgumentBindsVariable", engine));
@@ -330,7 +332,7 @@ public class WAMResolvingJavaMachineTest extends TestCase
         suite.addTest(new CallAndNotResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
                 "testNotFailSucceeds", engine));
         suite.addTest(new CallAndNotResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
-                "testNotTrueFails", engine));*/
+                "testNotTrueFails", engine));
 
         // Add all tests defined in the TrueAndFailResolverUnitTestBase class.
         suite.addTest(new TrueAndFailResolverUnitTestBase<Clause, WAMCompiledPredicate, WAMCompiledQuery>(
