@@ -44,7 +44,7 @@ import com.thesett.common.util.doublemaps.SymbolTable;
 public class PreCompiler extends BaseMachine implements LogicCompiler<Clause, Clause, Clause>
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(PreCompiler.class.getName());
+    /* private static final Logger log = Logger.getLogger(PreCompiler.class.getName()); */
 
     /** Holds the compiler output observer. */
     private LogicCompilerObserver<Clause, Clause> observer;

@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.thesett.aima.logic.fol.BasePositionalVisitor;
 import com.thesett.aima.logic.fol.Clause;
@@ -63,6 +64,9 @@ import com.thesett.common.util.doublemaps.SymbolTable;
  */
 public class PositionAndOccurrenceVisitor extends BasePositionalVisitor
 {
+    /** Used for debugging. */
+    /* private static final Logger log = Logger.getLogger(PositionAndOccurrenceVisitor.class.getName()); */
+
     /** Holds the current top-level body functor. <tt>null</tt> when traversing the head. */
     private Functor topLevelBodyFunctor;
 

@@ -41,8 +41,7 @@ import com.thesett.common.util.doublemaps.SymbolTable;
 class BuiltInTransformVisitor extends BasePositionalVisitor implements PositionalTermVisitor
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log =
-        java.util.logging.Logger.getLogger(BuiltInTransformVisitor.class.getName());
+    /* private static final Logger log = Logger.getLogger(BuiltInTransformVisitor.class.getName()); */
 
     /** Holds the built in transformation function. */
     private final BuiltInTransform builtInTransform;
@@ -84,7 +83,7 @@ class BuiltInTransformVisitor extends BasePositionalVisitor implements Positiona
 
             if (functor != transformed)
             {
-                log.fine("Transformed: " + functor + " to " + transformed.getClass());
+                /*log.fine("Transformed: " + functor + " to " + transformed.getClass());*/
 
                 BuiltInFunctor builtInFunctor = (BuiltInFunctor) transformed;
 

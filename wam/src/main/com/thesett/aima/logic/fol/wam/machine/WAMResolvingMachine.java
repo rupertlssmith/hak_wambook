@@ -400,7 +400,6 @@ public abstract class WAMResolvingMachine extends WAMBaseMachine
             //Decode f/n from the CON data.
             int f = val & 0x3fffffff;
 
-            /*log.fine("fn = " + fn);*/
             /*log.fine("f = " + f);*/
 
             // Create a new functor to hold the decoded data.

@@ -52,8 +52,7 @@ import com.thesett.common.util.doublemaps.SymbolTable;
 public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMInstruction>
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log =
-        java.util.logging.Logger.getLogger(OptimizeInstructions.class.getName());
+    /* private static final Logger log = Logger.getLogger(OptimizeInstructions.class.getName()); */
 
     /** Defines the possible states that this state machine can be in. */
     private enum State
@@ -117,7 +116,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             shift(unifyVoid);
             state = State.UVE;
 
-            log.fine(next + " -> " + unifyVoid);
+            /*log.fine(next + " -> " + unifyVoid);*/
         }
         else if ((SetVar == next.getMnemonic()) && isVoidVariable(next))
         {
@@ -132,14 +131,14 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             shift(setVoid);
             state = State.SVE;
 
-            log.fine(next + " -> " + setVoid);
+            /*log.fine(next + " -> " + setVoid);*/
         }
         else if ((GetVar == next.getMnemonic()) && (next.getMode1() == WAMInstruction.REG_ADDR) &&
                 (next.getReg1() == next.getReg2()))
         {
             discard(1);
 
-            log.fine(next + " -> eliminated");
+            /*log.fine(next + " -> eliminated");*/
 
             state = State.NM;
         }
@@ -155,14 +154,14 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             flush();
             state = State.NM;
 
-            log.fine(next + " -> " + unifyConst);
+            /*log.fine(next + " -> " + unifyConst);*/
         }
         else if ((GetStruc == next.getMnemonic()) && isConstant(next) && isNonArg(next))
         {
             discard(1);
             state = State.NM;
 
-            log.fine(next + " -> eliminated");
+            /*log.fine(next + " -> eliminated");*/
         }
         else if ((GetStruc == next.getMnemonic()) && isConstant(next) && !isNonArg(next))
         {
@@ -173,14 +172,14 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             flush();
             state = State.NM;
 
-            log.fine(next + " -> " + getConst);
+            /*log.fine(next + " -> " + getConst);*/
         }
         else if ((PutStruc == next.getMnemonic()) && isConstant(next) && isNonArg(next))
         {
             discard(1);
             state = State.NM;
 
-            log.fine(next + " -> eliminated");
+            /*log.fine(next + " -> eliminated");*/
         }
         else if ((PutStruc == next.getMnemonic()) && isConstant(next) && !isNonArg(next))
         {
@@ -190,7 +189,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             shift(putConst);
             state = State.NM;
 
-            log.fine(next + " -> " + putConst);
+            /*log.fine(next + " -> " + putConst);*/
         }
         else if ((SetVal == next.getMnemonic()) && isConstant(next) && isNonArg(next))
         {
@@ -202,7 +201,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             flush();
             state = State.NM;
 
-            log.fine(next + " -> " + setConst);
+            /*log.fine(next + " -> " + setConst);*/
         }
 
         // List optimizations.
@@ -215,7 +214,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             shift(getList);
             state = State.NM;
 
-            log.fine(next + " -> " + getList);
+            /*log.fine(next + " -> " + getList);*/
         }
         else if ((PutStruc == next.getMnemonic()) &&
                 ("cons".equals(next.getFn().getName()) && (next.getFn().getArity() == 2)))
@@ -226,7 +225,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
             shift(putList);
             state = State.NM;
 
-            log.fine(next + " -> " + putList);
+            /*log.fine(next + " -> " + putList);*/
         }
 
         // Default.

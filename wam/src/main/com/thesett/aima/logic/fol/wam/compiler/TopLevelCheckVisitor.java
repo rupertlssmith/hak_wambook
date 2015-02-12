@@ -48,8 +48,7 @@ import com.thesett.common.util.doublemaps.SymbolTable;
 class TopLevelCheckVisitor extends BasePositionalVisitor implements PositionalTermVisitor
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log =
-        java.util.logging.Logger.getLogger(TopLevelCheckVisitor.class.getName());
+    /* private static final Logger log = Logger.getLogger(TopLevelCheckVisitor.class.getName()); */
 
     /**
      * Creates the visitor with the supplied interner, symbol table and traverser.

@@ -61,6 +61,8 @@ import com.thesett.common.util.SizeableLinkedList;
 import com.thesett.common.util.doublemaps.SymbolKey;
 import com.thesett.common.util.doublemaps.SymbolTable;
 
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
+
 /**
  * WAMCompiled implements a compiler for the logical language, WAM, into a form suitable for passing to an
  * {@link WAMMachine}. The WAMMachine accepts sentences in the language that are compiled into a byte code form. The
@@ -169,8 +171,7 @@ public class InstructionCompiler extends DefaultBuiltIn
     implements LogicCompiler<Clause, WAMCompiledPredicate, WAMCompiledQuery>
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log =
-        java.util.logging.Logger.getLogger(InstructionCompiler.class.getName());
+    /* private static final Logger log = Logger.getLogger(InstructionCompiler.class.getName()); */
 
     /** Holds a list of all predicates encountered in the current scope. */
     protected Queue<SymbolKey> predicatesInScope = new LinkedList<SymbolKey>();
@@ -505,7 +506,7 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         // Generate the prefix code for the clause. Queries require a stack frames to hold their environment.
         /*log.fine("ALLOCATE " + numPermanentVars);*/
-        preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.AllocateN, WAMInstruction.REG_ADDR,
+        preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.AllocateN, REG_ADDR,
                 (byte) (numPermanentVars & 0xff)));
 
         result.addInstructions(preFixInstructions);
@@ -688,8 +689,8 @@ public class InstructionCompiler extends DefaultBuiltIn
 
                         if (isLocalVariable(introduction, addrMode))
                         {
-                            log.fine("UNIFY_LOCAL_VAL " + ((addrMode == WAMInstruction.REG_ADDR) ? "X" : "Y") +
-                                address);
+                            /*log.fine("UNIFY_LOCAL_VAL " + ((addrMode == REG_ADDR) ? "X" : "Y") +
+                                address);*/
 
                             instruction =
                                 new WAMInstruction(WAMInstruction.WAMInstructionSet.UnifyLocalVal, addrMode, address,
@@ -849,7 +850,7 @@ public class InstructionCompiler extends DefaultBuiltIn
 
             if ((count != null) && (count > 1))
             {
-                log.fine("Variable " + variable + " is permanent, count = " + count);
+                /*log.fine("Variable " + variable + " is permanent, count = " + count);*/
 
                 int allocation = (numPermanentVars++ & (0xff)) | (WAMInstruction.STACK_ADDR << 8);
                 symbolTable.put(variable.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);
@@ -928,7 +929,7 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         TermWalkers.positionalWalker(displayVisitor).walk(predicate);
 
-        log.fine(result.toString());
+        /*log.fine(result.toString());*/
     }
 
     /**
@@ -946,7 +947,7 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         TermWalkers.positionalWalker(displayVisitor).walk(query);
 
-        log.fine(result.toString());
+        /*log.fine(result.toString());*/
     }
 
     /**
@@ -989,15 +990,15 @@ public class InstructionCompiler extends DefaultBuiltIn
             {
                 if (variable.isAnonymous())
                 {
-                    log.fine("Query variable " + variable + " is temporary.");
+                    /*log.fine("Query variable " + variable + " is temporary.");*/
 
-                    int allocation = (lastAllocatedTempReg++ & (0xff)) | (WAMInstruction.REG_ADDR << 8);
+                    int allocation = (lastAllocatedTempReg++ & (0xff)) | (REG_ADDR << 8);
                     symbolTable.put(variable.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);
                     varNames.put((byte) allocation, variable.getName());
                 }
                 else
                 {
-                    log.fine("Query variable " + variable + " is permanent.");
+                    /*log.fine("Query variable " + variable + " is permanent.");*/
 
                     int allocation = (numPermanentVars++ & (0xff)) | (WAMInstruction.STACK_ADDR << 8);
                     symbolTable.put(variable.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);

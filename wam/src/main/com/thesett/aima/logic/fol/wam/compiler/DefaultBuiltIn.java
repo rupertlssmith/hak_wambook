@@ -34,6 +34,8 @@ import com.thesett.aima.search.util.uninformed.PostFixSearch;
 import com.thesett.common.util.SizeableLinkedList;
 import com.thesett.common.util.doublemaps.SymbolTable;
 
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
+
 /**
  * DefaultBuiltIn implements the standard WAM Prolog compilation for normal Prolog programs. Splitting this out into
  * DefaultBuiltIn which supplies the {@link BuiltIn} interface, allows different compilations to be used for built in
@@ -50,8 +52,7 @@ import com.thesett.common.util.doublemaps.SymbolTable;
 public class DefaultBuiltIn extends BaseMachine implements BuiltIn
 {
     /** Used for debugging. */
-    private static final java.util.logging.Logger log =
-        java.util.logging.Logger.getLogger(DefaultBuiltIn.class.getName());
+    /* private static final Logger log = Logger.getLogger(DefaultBuiltIn.class.getName()); */
 
     /** Enumerates the possible ways in which a variable can be introduced to a clause. */
     protected enum VarIntroduction
@@ -174,8 +175,8 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
                 if (isLastBodyTermInArgPositionOnly((Variable) nextOutermostArg, expression) &&
                         (addrMode == WAMInstruction.STACK_ADDR))
                 {
-                    log.fine("PUT_UNSAFE_VAL " + ((addrMode == WAMInstruction.REG_ADDR) ? "X" : "Y") + address + ", A" +
-                        j);
+                    /*log.fine("PUT_UNSAFE_VAL " + ((addrMode == REG_ADDR) ? "X" : "Y") + address + ", A" +
+                        j);*/
 
                     WAMInstruction instruction =
                         new WAMInstruction(WAMInstruction.WAMInstructionSet.PutUnsafeVal, addrMode, address,
@@ -263,8 +264,8 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
 
                             if (isLocalVariable(introduction, addrMode))
                             {
-                                log.fine("SET_LOCAL_VAL " + ((addrMode == WAMInstruction.REG_ADDR) ? "X" : "Y") +
-                                    address);
+                                /*log.fine("SET_LOCAL_VAL " + ((addrMode == REG_ADDR) ? "X" : "Y") +
+                                    address);*/
 
                                 instruction =
                                     new WAMInstruction(WAMInstruction.WAMInstructionSet.SetLocalVal, addrMode, address,
@@ -319,9 +320,9 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
 
             if (term instanceof Functor)
             {
-                /*log.fine("X" + lastAllocatedRegister + " = " + interner.getFunctorFunctorName((Functor) term));*/
+                /*log.fine("X" + lastAllocatedTempReg + " = " + interner.getFunctorFunctorName((Functor) term));*/
 
-                int allocation = (reg & 0xff) | (WAMInstruction.REG_ADDR << 8);
+                int allocation = (reg & 0xff) | (REG_ADDR << 8);
                 symbolTable.put(term.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);
             }
         }
@@ -355,7 +356,7 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
 
             if (symbolTable.get(term.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION) == null)
             {
-                int allocation = (lastAllocatedTempReg++ & 0xff) | (WAMInstruction.REG_ADDR << 8);
+                int allocation = (lastAllocatedTempReg++ & 0xff) | (REG_ADDR << 8);
                 symbolTable.put(term.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);
             }
         }
