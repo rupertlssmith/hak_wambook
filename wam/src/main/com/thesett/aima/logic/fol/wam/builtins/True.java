@@ -55,7 +55,19 @@ public class True extends BaseBuiltIn
     public SizeableLinkedList<WAMInstruction> compileBodyCall(Functor expression, boolean isFirstBody,
         boolean isLastBody, boolean chainRule, int permVarsRemaining)
     {
-        return new SizeableLinkedList<WAMInstruction>();
+        SizeableLinkedList<WAMInstruction> result = new SizeableLinkedList<WAMInstruction>();
+
+        if (isLastBody)
+        {
+            if (!chainRule)
+            {
+                result.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.Deallocate));
+            }
+
+            result.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.Proceed));
+        }
+
+        return result;
     }
 
     /**

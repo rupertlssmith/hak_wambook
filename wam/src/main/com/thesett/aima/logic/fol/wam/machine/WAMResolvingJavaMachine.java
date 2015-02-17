@@ -28,14 +28,19 @@ import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.ALLOCATE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.ALLOCATE_N;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CALL;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CON;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CONTINUE;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CUT;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.DEALLOCATE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.EXECUTE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_CONST;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_LEVEL;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_LIST;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_STRUC;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_VAL;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.GET_VAR;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.LIS;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.NECK_CUT;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.NO_OP;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PROCEED;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PUT_CONST;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PUT_LIST;
@@ -44,6 +49,7 @@ import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PUT_UNSAFE_
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PUT_VAL;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.PUT_VAR;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REF;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.RETRY;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.RETRY_ME_ELSE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SET_CONST;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SET_LOCAL_VAL;
@@ -53,7 +59,12 @@ import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SET_VOID;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.STACK_ADDR;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.STR;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SUSPEND;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SWITCH_ON_CONST;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SWITCH_ON_STRUC;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.SWITCH_ON_TERM;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.TRUST;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.TRUST_ME;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.TRY;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.TRY_ME_ELSE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.UNIFY_CONST;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.UNIFY_LOCAL_VAL;
@@ -1224,6 +1235,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // STACK[newB + n + 6] <- H
                 data.put(esp + n + 6, hp);
 
+                // STACK[newB + n + 7] <- B0
+                data.put(esp + n + 7, b0);
+
                 // B <- new B
                 bp = esp;
 
@@ -1326,7 +1340,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.SWITCH_ON_TERM:
+            case SWITCH_ON_TERM:
             {
                 // grab labels
                 int v = codeBuffer.getInt(ip + 1);
@@ -1368,7 +1382,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.SWITCH_ON_CONST:
+            case SWITCH_ON_CONST:
             {
                 // grab labels
                 int t = codeBuffer.getInt(ip + 1);
@@ -1397,7 +1411,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.SWITCH_ON_STRUC:
+            case SWITCH_ON_STRUC:
             {
                 // grab labels
                 int t = codeBuffer.getInt(ip + 1);
@@ -1426,7 +1440,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.TRY:
+            case TRY:
             {
                 // grab L
                 int l = codeBuffer.getInt(ip + 1);
@@ -1465,6 +1479,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // STACK[newB + n + 6] <- H
                 data.put(esp + n + 6, hp);
 
+                // STACK[newB + n + 7] <- B0
+                data.put(esp + n + 7, b0);
+
                 // B <- new B
                 bp = esp;
 
@@ -1480,7 +1497,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.RETRY:
+            case RETRY:
             {
                 // grab L
                 int l = codeBuffer.getInt(ip + 1);
@@ -1524,7 +1541,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.TRUST:
+            case TRUST:
             {
                 // grab L
                 int l = codeBuffer.getInt(ip + 1);
@@ -1568,20 +1585,20 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.NECK_CUT:
+            case NECK_CUT:
             {
-                ip += 1;
-
                 if (bp > b0)
                 {
                     bp = b0;
                     tidyTrail();
                 }
 
+                ip += 1;
+
                 break;
             }
 
-            case WAMInstruction.GET_LEVEL:
+            case GET_LEVEL:
             {
                 int yn = (int) codeBuffer.get(ip + 1) + (ep + 3);
 
@@ -1592,7 +1609,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.CUT:
+            case CUT:
             {
                 int yn = (int) codeBuffer.get(ip + 1) + (ep + 3);
 
@@ -1607,7 +1624,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.CONTINUE:
+            case CONTINUE:
             {
                 // grab L
                 int l = codeBuffer.getInt(ip + 1);
@@ -1619,7 +1636,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
-            case WAMInstruction.NO_OP:
+            case NO_OP:
             {
                 trace.fine(ip + ": NO_OP");
 
@@ -1675,7 +1692,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         return "choice: [ n = " + data.get(bp) + ", ep = " + data.get(bp + n + 1) + ", cp = " + data.get(bp + n + 2) +
             ", bp = " + data.get(bp + n + 3) + ", l = " + data.get(bp + n + 4) + ", trp = " + data.get(bp + n + 5) +
-            ", hp = " + data.get(bp + n + 6);
+            ", hp = " + data.get(bp + n + 6) + ", b0 = " + data.get(bp + n + 7);
     }
 
     /** {@inheritDoc} */
@@ -1849,7 +1866,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         }
         else
         {
-            return bp + data.get(bp) + 7;
+            return bp + data.get(bp) + 8;
         }
     }
 
@@ -1950,8 +1967,20 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         }
     }
 
+    /**
+     * Tidies trail when a choice point is being discarded, and a previous choice point it being made the current one.
+     *
+     * <p/>Copies trail bindings created since the choice point, into the trail as known to the previous choice point.
+     * That is bindings on the heap created during the choice point (between HB and H).
+     */
     private void tidyTrail()
     {
+        // Check that there is a current choice point to tidy down to.
+        if (bp == 0)
+        {
+            return;
+        }
+
         int i = data.get(bp + data.get(bp) + 5);
 
         while (i < trp)
