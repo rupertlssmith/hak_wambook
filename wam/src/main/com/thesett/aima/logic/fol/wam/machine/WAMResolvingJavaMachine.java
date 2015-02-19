@@ -1593,6 +1593,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                     tidyTrail();
                 }
 
+                trace.fine(ip + ": NECK_CUT");
+                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+
                 ip += 1;
 
                 break;
@@ -1604,6 +1607,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                 data.put(yn, b0);
 
+                trace.fine(ip + ": GET_LEVEL " + codeBuffer.get(ip + 1));
+
                 ip += 2;
 
                 break;
@@ -1613,11 +1618,16 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             {
                 int yn = (int) codeBuffer.get(ip + 1) + (ep + 3);
 
-                if (bp > yn)
+                int cbp = data.get(yn);
+
+                if (bp > cbp)
                 {
-                    bp = yn;
+                    bp = cbp;
                     tidyTrail();
                 }
+
+                trace.fine(ip + ": CUT " + codeBuffer.get(ip + 1));
+                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
 
                 ip += 2;
 
@@ -1975,13 +1985,17 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
      */
     private void tidyTrail()
     {
-        // Check that there is a current choice point to tidy down to.
+        int i;
+
+        // Check that there is a current choice point to tidy down to, otherwise tidy down to the root of the trail.
         if (bp == 0)
         {
-            return;
+            i = TRAIL_BASE;
         }
-
-        int i = data.get(bp + data.get(bp) + 5);
+        else
+        {
+            i = data.get(bp + data.get(bp) + 5);
+        }
 
         while (i < trp)
         {

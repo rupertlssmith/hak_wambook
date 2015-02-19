@@ -1693,6 +1693,19 @@ public class WAMInstruction implements Sizeable
     }
 
     /**
+     * Creates an instruction for the specified mnemonic that takes a single register argument, and no addressing mode,
+     * for situations where the addressing mode is already inferred by the instruction type.
+     *
+     * @param mnemonic The instruction mnemonic.
+     * @param reg1     The single register argument.
+     */
+    public WAMInstruction(WAMInstructionSet mnemonic, byte reg1)
+    {
+        this.mnemonic = mnemonic;
+        this.reg1 = reg1;
+    }
+
+    /**
      * Creates an instruction for the specified mnemonic that takes a single functor argument.
      *
      * @param mnemonic The instruction mnemonic.

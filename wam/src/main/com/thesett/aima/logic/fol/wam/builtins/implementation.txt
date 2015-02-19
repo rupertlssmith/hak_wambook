@@ -1,8 +1,15 @@
 === Cut
 
-neck_cut or cut, ok to insert that correctly.
-get_depth a little annoying, as needs to be part of the clause prefix instructions. also complicated the assignment
-of permanent registers.
+neck_cut, easy to insert that correctly.
+get_level a little annoying, as needs to be part of the clause prefix instructions. also complicated the assignment of permanent registers.
+
+1. To make the permanent variable allocation algorithm work, during detection of builtins, transform cut into cut(_X), that is a new anonymous variable. This variable will also be of a special type 'DepthVariable'.
+
+2. Make a small change to the permanent variable assignment, which is to detect the DepthVariable in body clauses after the first one, and add it the head/first body variables too. In this way, it will be counted as a permanent variable, and assigned its slot correctly.
+
+3. When assigning the slot to DepthVariable, also update the 'cutParameterVar' field, so that compileClause knows which slot to use and to insert a get_level instruction.
+
+4. Deep cut is detected in the permanent variable analysis phase, so compileClause knows up-front that get_level should be added to the prefix. For compileQuery, environment trimming is not important, so just allocate the get_level variable on every query, and make it the last permanent var (numPerms + 1).
 
 === Call
 

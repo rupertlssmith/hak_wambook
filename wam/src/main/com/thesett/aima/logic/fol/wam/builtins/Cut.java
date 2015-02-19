@@ -17,11 +17,15 @@ package com.thesett.aima.logic.fol.wam.builtins;
 
 import com.thesett.aima.logic.fol.Functor;
 import com.thesett.aima.logic.fol.FunctorName;
+import com.thesett.aima.logic.fol.Term;
+import com.thesett.aima.logic.fol.Variable;
 import com.thesett.aima.logic.fol.wam.compiler.DefaultBuiltIn;
+import com.thesett.aima.logic.fol.wam.compiler.SymbolTableKeys;
 import com.thesett.aima.logic.fol.wam.compiler.WAMInstruction;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.WAMInstructionSet.Cut;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.WAMInstructionSet.NeckCut;
 import com.thesett.common.util.SizeableLinkedList;
+import com.thesett.common.util.doublemaps.SymbolKey;
 
 /**
  * Cut implements the prolog '!' operator, that prevents back-tracking within a functor. '!' is true; that is it does
@@ -45,7 +49,9 @@ public class Cut extends BaseBuiltIn
      */
     public Cut(Functor functor, DefaultBuiltIn defaultBuiltIn)
     {
-        super(functor, defaultBuiltIn);
+        // Here the cut functor is transformed from ! to !(Y), where Y is a level variable that may be needed
+        // to hold the current choice point.
+        super(new Functor(functor.getName(), new Term[] { CutLevelVariable.CUT_LEVEL_VARIABLE }), defaultBuiltIn);
     }
 
     /** {@inheritDoc} */
@@ -67,7 +73,11 @@ public class Cut extends BaseBuiltIn
         }
         else
         {
-            instructions.add(new WAMInstruction(Cut /*, yn*/));
+            Integer cutLevelVarAllocation =
+                (Integer) defaultBuiltIn.getSymbolTable().get(CutLevelVariable.CUT_LEVEL_VARIABLE.getSymbolKey(),
+                    SymbolTableKeys.SYMKEY_ALLOCATION);
+
+            instructions.add(new WAMInstruction(Cut, (byte) (cutLevelVarAllocation & 0xff)));
         }
 
         return instructions;
@@ -81,5 +91,29 @@ public class Cut extends BaseBuiltIn
     public String toString()
     {
         return "Cut";
+    }
+
+    /**
+     * CutLevelVariable is an internal variable used to hold the current choice point when entering a clause with a deep
+     * cut, in order that the choice point may be restored on the cut.
+     *
+     * <p/>A single instance of this variable is all that is needed, since it is only used temporarily during the
+     * compilation of clauses. This instance will be annotated by the symbol key initialization so that it can be found in
+     * the correct place within each clause; on compiling a new clause it will be re-initialized into that clauses symbol
+     * table.
+     *
+     * <p/><b>Note:</b> A singleton instance here will prevent the compiler from ever being multi-threaded, since clauses
+     * can no longer be compiled in parallel. This can be worked around easily by making this variable a thread local.
+     */
+    public static class CutLevelVariable extends Variable
+    {
+        /** The single cut level variable instance. */
+        public static final CutLevelVariable CUT_LEVEL_VARIABLE = new CutLevelVariable();
+
+        /** Private constructor to prevent instantiation other than the singleton. */
+        CutLevelVariable()
+        {
+            super(-1, null, true);
+        }
     }
 }

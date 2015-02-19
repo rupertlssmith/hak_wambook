@@ -46,6 +46,9 @@ import com.thesett.aima.logic.fol.compiler.PositionalTermTraverserImpl;
 import com.thesett.aima.logic.fol.compiler.TermWalker;
 import com.thesett.aima.logic.fol.wam.TermWalkers;
 import com.thesett.aima.logic.fol.wam.builtins.BuiltIn;
+import com.thesett.aima.logic.fol.wam.builtins.Cut;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.STACK_ADDR;
 import com.thesett.aima.logic.fol.wam.machine.WAMMachine;
 import com.thesett.aima.logic.fol.wam.optimizer.Optimizer;
 import com.thesett.aima.logic.fol.wam.optimizer.WAMOptimizer;
@@ -60,8 +63,6 @@ import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.SizeableLinkedList;
 import com.thesett.common.util.doublemaps.SymbolKey;
 import com.thesett.common.util.doublemaps.SymbolTable;
-
-import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
 
 /**
  * WAMCompiled implements a compiler for the logical language, WAM, into a form suitable for passing to an
@@ -181,6 +182,12 @@ public class InstructionCompiler extends DefaultBuiltIn
 
     /** This is used to keep track of the number of permanent variables. */
     protected int numPermanentVars;
+
+    /**
+     * This is used to keep track of the position of the cut level variable, for deep cuts, if there is one. <tt>-1</tt>
+     * means no deep cut exists in the clause, and a value gte to zero means there is one, and references its slot.
+     */
+    protected int cutLevelVarSlot = -1;
 
     /** Keeps count of the current compiler scope, to keep symbols in each scope fresh. */
     protected int scope = 0;
@@ -337,6 +344,10 @@ public class InstructionCompiler extends DefaultBuiltIn
         // This is used to keep track of the number of permanent variables.
         numPermanentVars = 0;
 
+        // This is used to keep track of the allocation slot for the cut level variable, when needed. -1 means it is
+        // not needed, so it is initialized to this.
+        cutLevelVarSlot = -1;
+
         // These are used to generate pre and post instructions for the clause, for example, for the creation and
         // clean-up of stack frames.
         SizeableLinkedList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
@@ -395,6 +406,15 @@ public class InstructionCompiler extends DefaultBuiltIn
             // Allocate a stack frame at the start of the clause.
             /*log.fine("ALLOCATE " + numPermanentVars);*/
             preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.Allocate));
+        }
+
+        // Deep cuts require the current choice point to be kept in a permanent variable, so that it can be recovered
+        // once deeper choice points or environments have been reached.
+        if (cutLevelVarSlot >= 0)
+        {
+            /*log.fine("GET_LEVEL "+ cutLevelVarSlot);*/
+            preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.GetLevel,
+                    (byte) cutLevelVarSlot));
         }
 
         result.addInstructions(preFixInstructions);
@@ -481,6 +501,10 @@ public class InstructionCompiler extends DefaultBuiltIn
         // This is used to keep track of the number of permanent variables.
         numPermanentVars = 0;
 
+        // This is used to keep track of the allocation slot for the cut level variable, when needed. -1 means it is
+        // not needed, so it is initialized to this.
+        cutLevelVarSlot = -1;
+
         // These are used to generate pre and post instructions for the clause, for example, for the creation and
         // clean-up of stack frames.
         SizeableLinkedList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
@@ -508,6 +532,15 @@ public class InstructionCompiler extends DefaultBuiltIn
         /*log.fine("ALLOCATE " + numPermanentVars);*/
         preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.AllocateN, REG_ADDR,
                 (byte) (numPermanentVars & 0xff)));
+
+        // Deep cuts require the current choice point to be kept in a permanent variable, so that it can be recovered
+        // once deeper choice points or environments have been reached.
+        if (cutLevelVarSlot >= 0)
+        {
+            /*log.fine("GET_LEVEL "+ cutLevelVarSlot);*/
+            preFixInstructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.GetLevel, STACK_ADDR,
+                    (byte) cutLevelVarSlot));
+        }
 
         result.addInstructions(preFixInstructions);
 
@@ -752,13 +785,13 @@ public class InstructionCompiler extends DefaultBuiltIn
     }
 
     /**
-     * Allocates stack slots where need to the variables in a program clause. The algorithm here is fairly complex.
+     * Allocates stack slots where needed to the variables in a program clause. The algorithm here is fairly complex.
      *
      * <p/>A clause head and first body functor are taken together as the first unit, subsequent clause body functors
      * are taken as subsequent units. A variable appearing in more than one unit is said to be permanent, and must be
      * stored on the stack, rather than a register, otherwise the register that it occupies may be overwritten by calls
-     * to subsequent units. These variable are called permanent, which really means that they are local variables on the
-     * call stack.
+     * to subsequent units. These variables are called permanent, which really means that they are local variables on
+     * the call stack.
      *
      * <p/>In addition to working out which variables are permanent, the variables are also ordered by reverse position
      * of last body of occurrence, and assigned to allocation slots in this order. The number of permanent variables
@@ -775,6 +808,9 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         // A mapping from variables to the body number in which they appear last.
         Map<Variable, Integer> lastBodyMap = new HashMap<Variable, Integer>();
+
+        // Holds the variable that are in the head and first clause body argument.
+        Set<Variable> firstGroupVariables = new HashSet<Variable>();
 
         // Get the occurrence counts of variables in all clauses after the initial head and first body grouping.
         // In the same pass, pick out which body variables last occur in.
@@ -794,13 +830,19 @@ public class InstructionCompiler extends DefaultBuiltIn
                     {
                         lastBodyMap.put(variable, i);
                     }
+
+                    // If the cut level variable is seen, automatically add it to the first group variables,
+                    // so that it will be counted as a permanent variable, and assigned a stack slot. This
+                    // will only occur for deep cuts, that is where the cut comes after the first group.
+                    if (variable instanceof Cut.CutLevelVariable)
+                    {
+                        firstGroupVariables.add(variable);
+                    }
                 }
             }
         }
 
         // Get the set of variables in the head and first clause body argument.
-        Set<Variable> firstGroupVariables = new HashSet<Variable>();
-
         if (clause.getHead() != null)
         {
             Set<Variable> headVariables = TermUtils.findFreeVariables(clause.getHead());
@@ -854,6 +896,15 @@ public class InstructionCompiler extends DefaultBuiltIn
 
                 int allocation = (numPermanentVars++ & (0xff)) | (WAMInstruction.STACK_ADDR << 8);
                 symbolTable.put(variable.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION, allocation);
+
+                // Check if the variable is the cut level variable, and cache its stack slot in 'cutLevelVarSlot', so that
+                // the clause compiler knows which variable to use for the get_level instruction.
+                if (variable instanceof Cut.CutLevelVariable)
+                {
+                    //cutLevelVarSlot = allocation;
+                    cutLevelVarSlot = numPermanentVars - 1;
+                    /*log.fine("cutLevelVarSlot = " + cutLevelVarSlot);*/
+                }
 
                 permVarsRemainingCount[body]++;
             }
