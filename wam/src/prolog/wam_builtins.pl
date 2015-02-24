@@ -1,4 +1,6 @@
 /* Builts-ins for prolog. */
+true.
+
 \+(X) :- call(X),!,fail.
 \+(X).
 
