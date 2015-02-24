@@ -174,6 +174,9 @@ public class WAMInstruction implements Sizeable
     /** The no-op instruction, useful for inserting labels into the code. */
     public static final byte NO_OP = 0x29;
 
+    /** The internal call instruction for intrinsics. */
+    public static final byte CALL_INTERNAL = 0x2a;
+
     /** The suspend operation. */
     public static final byte SUSPEND = 0x7f;
 
@@ -1148,6 +1151,51 @@ public class WAMInstruction implements Sizeable
             public String toString(WAMInstruction instruction)
             {
                 return pretty;
+            }
+        },
+
+        /** The instruction to call a predicate. */
+        CallInternal(CALL_INTERNAL, "call_internal", 7, 0xa)
+        {
+            /** {@inheritDoc} */
+            protected void disassembleArguments(WAMInstruction instruction, int ip, ByteBuffer codeBuf,
+                VariableAndFunctorInterner interner)
+            {
+                int entryPoint = codeBuf.getInt(ip + 1);
+                int arity = codeBuf.get(ip + 5);
+                instruction.reg1 = codeBuf.get(ip + 6);
+            }
+
+            /** {@inheritDoc} */
+            public void emmitCode(WAMInstruction instruction, ByteBuffer codeBuf, WAMMachine machine)
+                throws LinkageException
+            {
+                int toCall = machine.internFunctorName(instruction.fn);
+
+                WAMCallPoint callPointToCall = machine.resolveCallPoint(toCall);
+
+                // Ensure that a valid call point was returned, otherwise a linkage error has occurred.
+                if (callPointToCall == null)
+                {
+                    throw new LinkageException("Could not resolve internal call to " + instruction.fn + ".", null, null,
+                        "Unable to resolve internal call to " + instruction.fn.getName() + "/" +
+                        instruction.fn.getArity() + ".");
+                }
+
+                int entryPoint = callPointToCall.entryPoint;
+
+                codeBuf.put(code);
+                codeBuf.putInt(entryPoint);
+                codeBuf.put((byte) instruction.fn.getArity());
+                codeBuf.put(instruction.reg1);
+            }
+
+            /** {@inheritDoc} */
+            public String toString(WAMInstruction instruction)
+            {
+                return pretty + " " +
+                    ((instruction.fn != null) ? (instruction.fn.getName() + "/" + instruction.fn.getArity()) : "") +
+                    (", " + instruction.reg1);
             }
         },
 

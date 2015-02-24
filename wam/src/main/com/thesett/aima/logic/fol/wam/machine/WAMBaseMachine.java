@@ -180,4 +180,23 @@ public abstract class WAMBaseMachine extends VariableAndFunctorInternerImpl impl
 
         return entry;
     }
+
+    /**
+     * Records the id of an internal function for the named functor. The method name uses the word 'address' but this is
+     * not really accurate, the address field is used to hold an id of the internal function to be invoked. This method
+     * differs from {@link #setCodeAddress(int, int, int)}, as it does not set the reverse mapping from the address to
+     * the functor name, since an address is not really being used.
+     *
+     * @param  functorName The interned name of the functor to find the start address of the code for.
+     * @param  id          The offset of the start of the functors code within the code area.
+     *
+     * @return The call table entry for the functors code within the code area of the machine.
+     */
+    protected WAMCallPoint setInternalCodeAddress(int functorName, int id)
+    {
+        WAMCallPoint entry = new WAMCallPoint(id, 0, functorName);
+        symbolTable.put(functorName, SYMKEY_CALLPOINTS, entry);
+
+        return entry;
+    }
 }

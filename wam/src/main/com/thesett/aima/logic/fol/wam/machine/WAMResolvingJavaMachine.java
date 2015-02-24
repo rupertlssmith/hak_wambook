@@ -21,12 +21,14 @@ import java.nio.IntBuffer;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.thesett.aima.logic.fol.FunctorName;
 import com.thesett.aima.logic.fol.Variable;
 import com.thesett.aima.logic.fol.wam.compiler.WAMCallPoint;
 import com.thesett.aima.logic.fol.wam.compiler.WAMInstruction;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.ALLOCATE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.ALLOCATE_N;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CALL;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CALL_INTERNAL;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CON;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CONTINUE;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.CUT;
@@ -128,6 +130,12 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     private static final java.util.logging.Logger trace =
         java.util.logging.Logger.getLogger("TRACE.WAMResolvingJavaMachine");
 
+    /** The id of the internal call/1 function. */
+    public static final int CALL_1_ID = 1;
+
+    /** The id of the internal call/1 function execute variant. */
+    public static final int EXECUTE_1_ID = 2;
+
     /** The mask to extract an address from a tagged heap cell. */
     public static final int AMASK = 0x3FFFFFFF;
 
@@ -172,6 +180,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
     /** Holds the current instruction pointer into the code. */
     private int ip;
+
+    /** Holds the current continuation pointer into the code. */
+    private int cp;
 
     /** Holds the entire data segment of the machine. All registers, heaps and stacks are held in here. */
     private IntBuffer data;
@@ -267,6 +278,10 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         // Ensure that the overridden reset method of WAMBaseMachine is run too, to clear the call table.
         super.reset();
+
+        // Put the internal functions in the call table.
+        setInternalCodeAddress(internFunctorName("call", 1), CALL_1_ID);
+        setInternalCodeAddress(internFunctorName("execute", 1), EXECUTE_1_ID);
 
         // Notify any debug monitor that the machine has been reset.
         if (monitor != null)
@@ -365,7 +380,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         int numOfArgs = 0;
 
         // Holds the current continuation point.
-        int cp = codeBuffer.position();
+        cp = codeBuffer.position();
 
         // Notify any debug monitor that execution is starting.
         if (monitor != null)
@@ -1655,6 +1670,24 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 break;
             }
 
+            // call_internal @(p/n), perms:
+            case CALL_INTERNAL:
+            {
+                // grab @(p/n), perms
+                int pn = codeBuffer.getInt(ip + 1);
+                int n = codeBuffer.get(ip + 5);
+                int numPerms = (int) codeBuffer.get(ip + 6);
+
+                // num_of_args <- n
+                numOfArgs = n;
+
+                trace.fine(ip + ": CALL_INTERNAL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");
+
+                callInternal(pn, n, numPerms);
+
+                break;
+            }
+
             // suspend on success:
             case SUSPEND:
             {
@@ -1765,6 +1798,124 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     protected int getHeap(int addr)
     {
         return data.get(addr);
+    }
+
+    /**
+     * Invokes an internal function.
+     *
+     * @param function The id of the internal function to call.
+     * @param arity    The arity of the function to call.
+     * @param numPerms The number of permanent variables remaining in the environment.
+     */
+    private void callInternal(int function, int arity, int numPerms)
+    {
+        switch (function)
+        {
+        case CALL_1_ID:
+            internalCall_1(numPerms);
+            break;
+
+        case EXECUTE_1_ID:
+            internalExecute_1();
+            break;
+
+        default:
+            throw new RuntimeException("Unknown internal function id: " + function);
+        }
+    }
+
+    /**
+     * Implements the 'call/1' predicate.
+     *
+     * @param numPerms The number of permanent variables remaining in the environment.
+     */
+    private void internalCall_1(int numPerms)
+    {
+        int pn = setupCall_1();
+
+        // Make the call.
+        // STACK[E + 2] <- numPerms
+        data.put(ep + 2, numPerms);
+
+        // CP <- P + instruction_size(P)
+        cp = ip + 7;
+
+        trace.fine(ip + ": (CALL) " + pn + ", " + numPerms + " (cp = " + cp + ")]");
+
+        // B0 <- B
+        b0 = bp;
+
+        // P <- @(p/n)
+        ip = pn;
+    }
+
+    /** Implements the execute variant of the 'call/1' predicate. */
+    private void internalExecute_1()
+    {
+        int pn = setupCall_1();
+
+        // Make the call.
+        trace.fine(ip + ": (EXECUTE) " + pn + " (cp = " + cp + ")]");
+
+        // B0 <- B
+        b0 = bp;
+
+        // P <- @(p/n)
+        ip = pn;
+    }
+
+    /**
+     * Sets up the registers to make a call, for implementing call/1. The first register should reference a structure to
+     * be turned into a predicate call. The arguments of this structure will be set up in the registers, and the entry
+     * point of the predicate to call will be returned.
+     *
+     * @return The entry address of the predicate to call.
+     */
+    private int setupCall_1()
+    {
+        // Get X0.
+        int addr = deref(0);
+        byte tag = derefTag;
+        int val = derefVal;
+
+        // Check it points to a structure.
+        int fn;
+
+        if (tag == STR)
+        {
+            fn = getHeap(val);
+        }
+        else if (tag == CON)
+        {
+            fn = val;
+        }
+        else
+        {
+            throw new RuntimeException("call/1 not invoked against structure.");
+        }
+
+        // Look up the call point of the matching functor.
+        int f = fn & 0x00ffffff;
+
+        WAMCallPoint callPoint = resolveCallPoint(f);
+
+        if (callPoint == null)
+        {
+            throw new RuntimeException("call/1 to unknown call point.");
+        }
+
+        int pn = callPoint.entryPoint;
+
+        // Set registers X0... to ref to args...
+        FunctorName functorName = getDeinternedFunctorName(f);
+        int arity = functorName.getArity();
+
+        for (int i = 0; i < arity; i++)
+        {
+            data.put(i, refTo(val + 1 + i));
+        }
+
+        return pn;
     }
 
     /**

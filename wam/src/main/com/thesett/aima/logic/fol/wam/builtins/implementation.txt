@@ -13,13 +13,20 @@ get_level a little annoying, as needs to be part of the clause prefix instructio
 
 === Call
 
-Argument to call is built on the heap, or stack.
+When statically calling a predicate, its arguments are built on the heap, and referenced by registers or stack variables. Once this is set up, the predicate is called.
 
-Call is implemented as a procedure that takes the argument, and turns it into a call, that is built args on heap, assign
-argument registers, call.
+A dynamic call should behave in exactly the same way, so call/1 needs to implement the procedure described above.
 
-Is it necessary to build a complete copy of the arguments on the heap, or can an argument register be set to point into
-the existing structure?
+When call/1 is invoked, its arguments will already have been created. What is needed is to dereference the argument, find the structure it points to, resolve that as a functor to call (or fail), assign argument registers to the sub-terms of the structure, then make the call.
+
+1. Add a switch for invoking internal functions, and a new instruction call_internal. Built-ins with special internal functions will use this, call_call being one of them.
+2. Implement call_call.
+  Deref argument.
+  Get structure and num args.
+  Check that fn exists to call.
+  Bind arguments to registers.
+  Call it.
+3. Recognize call and replace its functor with call_call.
 
 === Unifies
 

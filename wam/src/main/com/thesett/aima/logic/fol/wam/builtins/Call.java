@@ -49,14 +49,39 @@ public class Call extends BaseBuiltIn
     public SizeableLinkedList<WAMInstruction> compileBodyArguments(Functor expression, boolean isFirstBody,
         FunctorName clauseName, int bodyNumber)
     {
-        return new SizeableLinkedList<WAMInstruction>();
+        // Build the argument to call in the usual way.
+        return defaultBuiltIn.compileBodyArguments(expression, isFirstBody, clauseName, bodyNumber);
     }
 
     /** {@inheritDoc} */
     public SizeableLinkedList<WAMInstruction> compileBodyCall(Functor expression, boolean isFirstBody,
         boolean isLastBody, boolean chainRule, int permVarsRemaining)
     {
-        return new SizeableLinkedList<WAMInstruction>();
+        // Used to build up the results in.
+        SizeableLinkedList<WAMInstruction> instructions = new SizeableLinkedList<WAMInstruction>();
+
+        // Generate the call or tail-call instructions, followed by the call address, which is f_n of the
+        // called program.
+        if (isLastBody)
+        {
+            // Deallocate the stack frame at the end of the clause, but prior to calling the last
+            // body predicate.
+            // This is not required for chain rules, as they do not need a stack frame.
+            if (!chainRule)
+            {
+                instructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.Deallocate));
+            }
+
+            instructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.CallInternal,
+                    (byte) (permVarsRemaining & 0xff), new FunctorName("execute", 1)));
+        }
+        else
+        {
+            instructions.add(new WAMInstruction(WAMInstruction.WAMInstructionSet.CallInternal,
+                    (byte) (permVarsRemaining & 0xff), new FunctorName("call", 1)));
+        }
+
+        return instructions;
     }
 
     /**
