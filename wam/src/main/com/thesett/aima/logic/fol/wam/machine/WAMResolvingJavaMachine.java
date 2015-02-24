@@ -1683,7 +1683,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                 trace.fine(ip + ": CALL_INTERNAL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");
 
-                callInternal(pn, n, numPerms);
+                boolean callOk = callInternal(pn, n, numPerms);
+
+                failed = !callOk;
 
                 break;
             }
@@ -1803,21 +1805,21 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     /**
      * Invokes an internal function.
      *
-     * @param function The id of the internal function to call.
-     * @param arity    The arity of the function to call.
-     * @param numPerms The number of permanent variables remaining in the environment.
+     * @param  function The id of the internal function to call.
+     * @param  arity    The arity of the function to call.
+     * @param  numPerms The number of permanent variables remaining in the environment.
+     *
+     * @return <tt>true</tt> if the call succeeded, and <tt>false</tt> if it failed.
      */
-    private void callInternal(int function, int arity, int numPerms)
+    private boolean callInternal(int function, int arity, int numPerms)
     {
         switch (function)
         {
         case CALL_1_ID:
-            internalCall_1(numPerms);
-            break;
+            return internalCall_1(numPerms);
 
         case EXECUTE_1_ID:
-            internalExecute_1();
-            break;
+            return internalExecute_1();
 
         default:
             throw new RuntimeException("Unknown internal function id: " + function);
@@ -1827,11 +1829,18 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     /**
      * Implements the 'call/1' predicate.
      *
-     * @param numPerms The number of permanent variables remaining in the environment.
+     * @param  numPerms The number of permanent variables remaining in the environment.
+     *
+     * @return <tt>true</tt> if the call succeeded, and <tt>false</tt> if it failed.
      */
-    private void internalCall_1(int numPerms)
+    private boolean internalCall_1(int numPerms)
     {
         int pn = setupCall_1();
+
+        if (pn == -1)
+        {
+            return false;
+        }
 
         // Make the call.
         // STACK[E + 2] <- numPerms
@@ -1847,12 +1856,23 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         // P <- @(p/n)
         ip = pn;
+
+        return true;
     }
 
-    /** Implements the execute variant of the 'call/1' predicate. */
-    private void internalExecute_1()
+    /**
+     * Implements the execute variant of the 'call/1' predicate.
+     *
+     * @return <tt>true</tt> if the call succeeded, and <tt>false</tt> if it failed.
+     */
+    private boolean internalExecute_1()
     {
         int pn = setupCall_1();
+
+        if (pn == -1)
+        {
+            return false;
+        }
 
         // Make the call.
         trace.fine(ip + ": (EXECUTE) " + pn + " (cp = " + cp + ")]");
@@ -1862,6 +1882,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         // P <- @(p/n)
         ip = pn;
+
+        return true;
     }
 
     /**
@@ -1869,7 +1891,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
      * be turned into a predicate call. The arguments of this structure will be set up in the registers, and the entry
      * point of the predicate to call will be returned.
      *
-     * @return The entry address of the predicate to call.
+     * @return The entry address of the predicate to call, or <tt>-1</tt> if the call cannot be resolved to a known
+     *         predicate.
      */
     private int setupCall_1()
     {
@@ -1891,7 +1914,9 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         }
         else
         {
-            throw new RuntimeException("call/1 not invoked against structure.");
+            trace.fine("call/1 not invoked against structure.");
+
+            return -1;
         }
 
         // Look up the call point of the matching functor.
@@ -1899,9 +1924,11 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         WAMCallPoint callPoint = resolveCallPoint(f);
 
-        if (callPoint == null)
+        if (callPoint.entryPoint == -1)
         {
-            throw new RuntimeException("call/1 to unknown call point.");
+            trace.fine("call/1 to unknown call point.");
+
+            return -1;
         }
 
         int pn = callPoint.entryPoint;
