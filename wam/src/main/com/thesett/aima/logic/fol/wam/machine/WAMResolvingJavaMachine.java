@@ -2103,7 +2103,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         if ((t1 == WAMInstruction.REF) && ((t2 != WAMInstruction.REF) || (a2 < a1)))
         {
             //  STORE[a1] <- STORE[a2]
-            data.put(a1, refTo(a2));
+            //data.put(a1, refTo(a2));
+            data.put(a1, data.get(a2));
 
             //  trail(a1)
             trail(a1);
@@ -2111,7 +2112,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         else if (t2 == WAMInstruction.REF)
         {
             //  STORE[a2] <- STORE[a1]
-            data.put(a2, refTo(a1));
+            //data.put(a2, refTo(a1));
+            data.put(a2, data.get(a1));
 
             //  tail(a2)
             trail(a2);
