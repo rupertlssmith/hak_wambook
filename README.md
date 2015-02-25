@@ -27,16 +27,18 @@ Run the WAM implementation with:
 Audience
 --------
 
-This work was originally produced in order for me to learn how such a compiler works. The code is well documented, and tries to faithfully implement the design described in the book.
+This work may be of interest to students of compiler design. The code is well documented, and tries to faithfully implement the design described in the book.
+    
+This work was originally produced in order for me to learn how such a compiler works, as well as to provide a basis for experimenting with variations on logic programming languages.
 
-This work may be of interest to students of compiler design. In addition to Prolog, you can find examples of parsers, and elements of a modular compiler design that are fairly "text book" in their nature.
+In addition to Prolog, you can find examples of parsers, and elements of a modular compiler design that are fairly "text book" in their nature. The symbol table design was heavily influenced by one described in "Engineering A Compiler", by Keith Cooper and Linda Torczon, and could be re-used in other compiler projects.
 
 State of the work
 -----------------
 
 The languages L0 through L3 are complete as per the book.
 
-The WAM machine is missing the indexing scheme, and the implementation of cut. Part of the optimization based on memory ordering has also been missed out. These things may get completed at a later date, especially if someone were to contribute them.
+The WAM machine is missing the indexing scheme. This may get completed at a later date, especially if someone were to contribute it.
 
 The languages L0 through L2 also have native byte code machines implemented in C. Given the state-of-the-art in Java compilations and virtual machines, these are unlikely to offer a performance advantage over the machines implemented in Java.
 
