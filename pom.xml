@@ -8,7 +8,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>wambookbuild</artifactId>
     <name>HAK_WAM_Book</name>
-    <version>1.0.1</version><!--wambook.version-->
+    <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
 
     <description>LoJiX is a framework for logic compilers and a Prolog implementation.</description>
     <url>https://github.com/rupertlssmith/lojix</url>
