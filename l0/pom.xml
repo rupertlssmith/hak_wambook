@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>l0</artifactId>
     <name>l0</name>
-    <version>1.0.1-SNAPSHOT</version><!--wambook.version-->
+    <version>1.0.1</version><!--wambook.version-->
 
     <description>Implementation of the L0 machine described in  "Warren's Abstact Machine, A Tutorial Reconstruction, by Hassan Ait-Kaci"</description>
     <url>https://www.thesett.com/build_reports/lojix/l0</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>wambookbuild</artifactId>
-        <version>1.0.1-SNAPSHOT</version><!--wambook.version-->
+        <version>1.0.1</version><!--wambook.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
