@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>aima-native-build</artifactId>
     <name>aima-native</name>
-    <version>1.0.2</version><!--wambook.version-->
+    <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
 
     <description>Library of code developed from 'Artificial Intelligence a Modern Approach', Prentice Hall.</description>
     <url>https://www.thesett.com/build_reports/lojix/aima-native</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>wambookbuild</artifactId>
-        <version>1.0.2</version><!--wambook.version-->
+        <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,25 +36,25 @@
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l0</artifactId>
-            <version>1.0.2</version><!--wambook.version-->
+            <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l1</artifactId>
-            <version>1.0.2</version><!--wambook.version-->
+            <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l2</artifactId>
-            <version>1.0.2</version><!--wambook.version-->
+            <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l3</artifactId>
-            <version>1.0.2</version><!--wambook.version-->
+            <version>1.0.3-SNAPSHOT</version><!--wambook.version-->
         </dependency>
 
         <dependency>
