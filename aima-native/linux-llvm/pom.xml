@@ -4,7 +4,7 @@
     <groupId>com.thesett</groupId>
     <artifactId>libaima_native</artifactId>
     <name>aima-native-linux-llvm</name>
-    <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+    <version>1.0.2</version><!--wambook.version-->
 
     <description>Native implementations for AIMA for Linux.</description>
     <url>https://www.thesett.com/build_reports/lojix/aima-native/linux-llvm</url>
@@ -18,7 +18,7 @@
     <parent>
         <groupId>com.thesett</groupId>
         <artifactId>aima-native-build</artifactId>
-        <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+        <version>1.0.2</version><!--wambook.version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,28 +36,28 @@
             <groupId>com.thesett</groupId>
             <artifactId>l0</artifactId>
             <classifier>tests</classifier>
-            <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+            <version>1.0.2</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l1</artifactId>
             <classifier>tests</classifier>
-            <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+            <version>1.0.2</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l2</artifactId>
             <classifier>tests</classifier>
-            <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+            <version>1.0.2</version><!--wambook.version-->
         </dependency>
 
         <dependency>
             <groupId>com.thesett</groupId>
             <artifactId>l3</artifactId>
             <classifier>tests</classifier>
-            <version>1.0.2-SNAPSHOT</version><!--wambook.version-->
+            <version>1.0.2</version><!--wambook.version-->
         </dependency>
 
     </dependencies>
