@@ -51,8 +51,7 @@ import com.thesett.common.util.doublemaps.SymbolTableImpl;
 public class L3ResolvingNativeMachine extends L3ResolvingMachine
 {
     /** Used for tracing instruction executions. */
-    private static final java.util.logging.Logger trace =
-        java.util.logging.Logger.getLogger("TRACE.L3ResolvingNativeMachine");
+    /* private static final Logger trace = Logger.getLogger("TRACE.L3ResolvingNativeMachine"); */
 
     /** Defines the initial code area size for the virtual machine. */
     private static final int CODE_SIZE = 10000;
@@ -298,6 +297,6 @@ public class L3ResolvingNativeMachine extends L3ResolvingMachine
      */
     private void trace(String message)
     {
-        trace.fine(message);
+        /*trace.fine(message);*/
     }
 }

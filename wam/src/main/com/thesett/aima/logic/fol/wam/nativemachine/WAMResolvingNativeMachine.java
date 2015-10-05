@@ -51,8 +51,7 @@ import com.thesett.common.util.doublemaps.SymbolTableImpl;
 public class WAMResolvingNativeMachine extends WAMResolvingMachine
 {
     /** Used for tracing instruction executions. */
-    private static final java.util.logging.Logger trace =
-        java.util.logging.Logger.getLogger("TRACE.WAMResolvingNativeMachine");
+    /* private static final Logger trace = Logger.getLogger("TRACE.WAMResolvingNativeMachine"); */
 
     /** Defines the initial code area size for the virtual machine. */
     private static final int CODE_SIZE = 10000;
@@ -248,6 +247,6 @@ public class WAMResolvingNativeMachine extends WAMResolvingMachine
      */
     private void trace(String message)
     {
-        trace.fine(message);
+        /*trace.fine(message);*/
     }
 }

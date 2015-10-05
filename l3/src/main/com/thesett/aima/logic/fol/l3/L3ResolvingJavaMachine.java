@@ -96,8 +96,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
     /* private static final Logger log = Logger.getLogger(L3ResolvingJavaMachine.class.getName()); */
 
     /** Used for tracing instruction executions. */
-    private static final java.util.logging.Logger trace =
-        java.util.logging.Logger.getLogger("TRACE.L3ResolvingJavaMachine");
+    /* private static final Logger trace = Logger.getLogger("TRACE.L3ResolvingJavaMachine"); */
 
     /** Defines the register capacity for the virtual machine. */
     private static final int REG_SIZE = 10;
@@ -373,7 +372,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 int fn = ByteBufferUtils.getIntFromBytes(code, ip + 3);
 
-                trace.fine(ip + ": PUT_STRUC " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": PUT_STRUC " + printSlot(xi, mode) + ", " + fn);*/
 
                 // heap[h] <- STR, h + 1
                 data[hp] = (L3Instruction.STR << 24) | ((hp + 1) & 0xFFFFFF);
@@ -400,7 +399,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 byte mode = code[ip + 1];
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
 
-                trace.fine(ip + ": SET_VAR " + printSlot(xi, mode));
+                /*trace.fine(ip + ": SET_VAR " + printSlot(xi, mode));*/
 
                 // heap[h] <- REF, h
                 data[hp] = (L3Instruction.REF << 24) | (hp & 0xFFFFFF);
@@ -424,7 +423,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 byte mode = code[ip + 1];
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
 
-                trace.fine(ip + ": SET_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": SET_VAL " + printSlot(xi, mode));*/
 
                 // heap[h] <- Xi
                 data[hp] = data[xi];
@@ -446,7 +445,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 int fn = ByteBufferUtils.getIntFromBytes(code, ip + 3);
 
-                trace.fine(ip + ": GET_STRUC " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": GET_STRUC " + printSlot(xi, mode) + ", " + fn);*/
 
                 // addr <- deref(Xi);
                 int addr = deref(xi);
@@ -513,7 +512,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 byte mode = code[ip + 1];
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
 
-                trace.fine(ip + ": UNIFY_VAR " + printSlot(xi, mode));
+                /*trace.fine(ip + ": UNIFY_VAR " + printSlot(xi, mode));*/
 
                 // switch mode
                 if (!writeMode)
@@ -552,7 +551,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 byte mode = code[ip + 1];
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
 
-                trace.fine(ip + ": UNIFY_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": UNIFY_VAL " + printSlot(xi, mode));*/
 
                 // switch mode
                 if (!writeMode)
@@ -588,7 +587,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 byte ai = code[ip + 3];
 
-                trace.fine(ip + ": PUT_VAR " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": PUT_VAR " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // heap[h] <- REF, H
                 data[hp] = (L3Instruction.REF << 24) | (hp & 0xFFFFFF);
@@ -616,7 +615,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 byte ai = code[ip + 3];
 
-                trace.fine(ip + ": PUT_VAL " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": PUT_VAL " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // Ai <- Xn
                 data[ai] = data[xi];
@@ -635,7 +634,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 byte ai = code[ip + 3];
 
-                trace.fine(ip + ": GET_VAR " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": GET_VAR " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // Xn <- Ai
                 data[xi] = data[ai];
@@ -654,7 +653,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 int xi = (int) code[ip + 2] + ((mode == STACK_ADDR) ? (ep + 3) : 0);
                 byte ai = code[ip + 3];
 
-                trace.fine(ip + ": GET_VAL " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": GET_VAL " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // unify (Xn, Ai)
                 failed = !unify(xi, ai);
@@ -678,7 +677,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 // CP <- P + instruction_size(P)
                 cp = ip + 6;
 
-                trace.fine(ip + ": CALL " + pn + "/" + n + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": CALL " + pn + "/" + n + " (cp = " + cp + ")]");*/
 
                 // Ensure that the predicate to call is known and linked in, otherwise fail.
                 if (pn == -1)
@@ -697,7 +696,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
             // proceed:
             case PROCEED:
             {
-                trace.fine(ip + ": PROCEED" + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": PROCEED" + " (cp = " + cp + ")]");*/
 
                 // P <- CP
                 ip = cp;
@@ -730,8 +729,8 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 ep = esp;
                 esp = esp + n + 3;
 
-                trace.fine(ip + ": ALLOCATE");
-                trace.fine("-> env @ " + ep + " " + traceEnvFrame());
+                /*trace.fine(ip + ": ALLOCATE");*/
+                /*trace.fine("-> env @ " + ep + " " + traceEnvFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 2;
@@ -747,8 +746,8 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 // E <- STACK[E]
                 ep = data[ep];
 
-                trace.fine(ip + ": DEALLOCATE");
-                trace.fine("<- env @ " + ep + " " + traceEnvFrame());
+                /*trace.fine(ip + ": DEALLOCATE");*/
+                /*trace.fine("<- env @ " + ep + " " + traceEnvFrame());*/
 
                 // P <- STACK[E + 1]
                 ip = newip;
@@ -802,8 +801,8 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": TRY_ME_ELSE");
-                trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRY_ME_ELSE");*/
+                /*trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 5;
@@ -847,8 +846,8 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": RETRY_ME_ELSE");
-                trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": RETRY_ME_ELSE");*/
+                /*trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 5;
@@ -889,8 +888,8 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
                 // B <- STACK[B + n + 3]
                 bp = data[bp + n + 3];
 
-                trace.fine(ip + ": TRUST_ME");
-                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRUST_ME");*/
+                /*trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 1;
@@ -901,7 +900,7 @@ public class L3ResolvingJavaMachine extends L3ResolvingMachine
             // suspend on success:
             case SUSPEND:
             {
-                trace.fine(ip + ": SUSPEND");
+                /*trace.fine(ip + ": SUSPEND");*/
                 ip += 1;
                 suspended = true;
 

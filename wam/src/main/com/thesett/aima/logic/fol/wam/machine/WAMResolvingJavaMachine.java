@@ -127,8 +127,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     /* private static final Logger log = Logger.getLogger(WAMResolvingJavaMachine.class.getName()); */
 
     /** Used for tracing instruction executions. */
-    private static final java.util.logging.Logger trace =
-        java.util.logging.Logger.getLogger("TRACE.WAMResolvingJavaMachine");
+    /* private static final Logger trace = Logger.getLogger("TRACE.WAMResolvingJavaMachine"); */
 
     /** The id of the internal call/1 function. */
     public static final int CALL_1_ID = 1;
@@ -152,13 +151,13 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     private static final int REG_SIZE = 256;
 
     /** Defines the heap size to use for the virtual machine. */
-    private static final int HEAP_SIZE = 10000;
+    private static final int HEAP_SIZE = 10000000;
 
     /** Defines the offset of the base of the heap in the data area. */
     private static final int HEAP_BASE = REG_SIZE;
 
     /** Defines the stack size to use for the virtual machine. */
-    private static final int STACK_SIZE = 10000;
+    private static final int STACK_SIZE = 1000000;
 
     /** Defines the offset of the base of the stack in the data area. */
     private static final int STACK_BASE = REG_SIZE + HEAP_SIZE;
@@ -170,13 +169,13 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
     private static final int TRAIL_BASE = REG_SIZE + HEAP_SIZE + STACK_SIZE;
 
     /** Defines the max unification stack depth for the virtual machine. */
-    private static final int PDL_SIZE = 1000;
+    private static final int PDL_SIZE = 10000;
 
     /** Defines the highest address in the data area of the virtual machine. */
     private static final int TOP = REG_SIZE + HEAP_SIZE + STACK_SIZE + TRAIL_SIZE + PDL_SIZE;
 
     /** Defines the initial code area size for the virtual machine. */
-    private static final int CODE_SIZE = 10000;
+    private static final int CODE_SIZE = 1000000;
 
     /** Holds the current instruction pointer into the code. */
     private int ip;
@@ -415,7 +414,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 int fn = codeBuffer.getInt(ip + 3);
 
-                trace.fine(ip + ": PUT_STRUC " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": PUT_STRUC " + printSlot(xi, mode) + ", " + fn);*/
 
                 // heap[h] <- STR, h + 1
                 data.put(hp, fn);
@@ -439,7 +438,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": SET_VAR " + printSlot(xi, mode));
+                /*trace.fine(ip + ": SET_VAR " + printSlot(xi, mode));*/
 
                 // heap[h] <- REF, h
                 data.put(hp, refTo(hp));
@@ -463,7 +462,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": SET_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": SET_VAL " + printSlot(xi, mode));*/
 
                 // heap[h] <- Xi
                 data.put(hp, data.get(xi));
@@ -485,7 +484,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 int fn = codeBuffer.getInt(ip + 3);
 
-                trace.fine(ip + ": GET_STRUC " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": GET_STRUC " + printSlot(xi, mode) + ", " + fn);*/
 
                 // addr <- deref(Xi);
                 int addr = deref(xi);
@@ -512,7 +511,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                     // mode <- write
                     writeMode = true;
-                    trace.fine("-> write mode");
+                    /*trace.fine("-> write mode");*/
 
                     break;
                 }
@@ -528,7 +527,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                         // mode <- read
                         writeMode = false;
-                        trace.fine("-> read mode");
+                        /*trace.fine("-> read mode");*/
                     }
                     else
                     {
@@ -559,7 +558,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": UNIFY_VAR " + printSlot(xi, mode));
+                /*trace.fine(ip + ": UNIFY_VAR " + printSlot(xi, mode));*/
 
                 // switch mode
                 if (!writeMode)
@@ -597,7 +596,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": UNIFY_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": UNIFY_VAL " + printSlot(xi, mode));*/
 
                 // switch mode
                 if (!writeMode)
@@ -633,7 +632,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 byte ai = codeBuffer.get(ip + 3);
 
-                trace.fine(ip + ": PUT_VAR " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": PUT_VAR " + printSlot(xi, mode) + ", A" + ai);*/
 
                 if (mode == WAMInstruction.REG_ADDR)
                 {
@@ -672,7 +671,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 byte ai = codeBuffer.get(ip + 3);
 
-                trace.fine(ip + ": PUT_VAL " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": PUT_VAL " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // Ai <- Xn
                 data.put(ai, data.get(xi));
@@ -691,7 +690,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 byte ai = codeBuffer.get(ip + 3);
 
-                trace.fine(ip + ": GET_VAR " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": GET_VAR " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // Xn <- Ai
                 data.put(xi, data.get(ai));
@@ -710,7 +709,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 byte ai = codeBuffer.get(ip + 3);
 
-                trace.fine(ip + ": GET_VAL " + printSlot(xi, mode) + ", A" + ai);
+                /*trace.fine(ip + ": GET_VAL " + printSlot(xi, mode) + ", A" + ai);*/
 
                 // unify (Xn, Ai)
                 failed = !unify(xi, ai);
@@ -728,7 +727,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 int fn = codeBuffer.getInt(ip + 3);
 
-                trace.fine(ip + ": PUT_CONST " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": PUT_CONST " + printSlot(xi, mode) + ", " + fn);*/
 
                 // Xi <- heap[h]
                 data.put(xi, constantCell(fn));
@@ -746,7 +745,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int xi = getRegisterOrStackSlot(mode);
                 int fn = codeBuffer.getInt(ip + 3);
 
-                trace.fine(ip + ": GET_CONST " + printSlot(xi, mode) + ", " + fn);
+                /*trace.fine(ip + ": GET_CONST " + printSlot(xi, mode) + ", " + fn);*/
 
                 // addr <- deref(Xi)
                 int addr = deref(xi);
@@ -765,7 +764,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             {
                 int fn = codeBuffer.getInt(ip + 1);
 
-                trace.fine(ip + ": SET_CONST " + fn);
+                /*trace.fine(ip + ": SET_CONST " + fn);*/
 
                 // heap[h] <- <CON, c>
                 data.put(hp, constantCell(fn));
@@ -783,7 +782,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             {
                 int fn = codeBuffer.getInt(ip + 1);
 
-                trace.fine(ip + ": UNIFY_CONST " + fn);
+                /*trace.fine(ip + ": UNIFY_CONST " + fn);*/
 
                 // switch mode
                 if (!writeMode)
@@ -819,7 +818,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": PUT_LIST " + printSlot(xi, mode));
+                /*trace.fine(ip + ": PUT_LIST " + printSlot(xi, mode));*/
 
                 // Xi <- <LIS, H>
                 data.put(xi, listCell(hp));
@@ -836,7 +835,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": GET_LIST " + printSlot(xi, mode));
+                /*trace.fine(ip + ": GET_LIST " + printSlot(xi, mode));*/
 
                 int addr = deref(xi);
                 int tag = derefTag;
@@ -859,7 +858,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                     // mode <- write
                     writeMode = true;
-                    trace.fine("-> write mode");
+                    /*trace.fine("-> write mode");*/
 
                     break;
                 }
@@ -872,7 +871,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                     // mode <- read
                     writeMode = false;
-                    trace.fine("-> read mode");
+                    /*trace.fine("-> read mode");*/
 
                     break;
                 }
@@ -895,7 +894,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // grab N
                 int n = (int) codeBuffer.get(ip + 1);
 
-                trace.fine(ip + ": SET_VOID " + n);
+                /*trace.fine(ip + ": SET_VOID " + n);*/
 
                 // for i <- H to H + n - 1 do
                 //  HEAP[i] <- <REF, i>
@@ -918,7 +917,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // grab N
                 int n = (int) codeBuffer.get(ip + 1);
 
-                trace.fine(ip + ": UNIFY_VOID " + n);
+                /*trace.fine(ip + ": UNIFY_VOID " + n);*/
 
                 // case mode of
                 if (!writeMode)
@@ -954,7 +953,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 int yi = (int) codeBuffer.get(ip + 2) + (ep + 3);
                 byte ai = codeBuffer.get(ip + 3);
 
-                trace.fine(ip + ": PUT_UNSAFE_VAL " + printSlot(yi, WAMInstruction.STACK_ADDR) + ", A" + ai);
+                /*trace.fine(ip + ": PUT_UNSAFE_VAL " + printSlot(yi, WAMInstruction.STACK_ADDR) + ", A" + ai);*/
 
                 int addr = deref(yi);
 
@@ -984,7 +983,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": SET_LOCAL_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": SET_LOCAL_VAL " + printSlot(xi, mode));*/
 
                 int addr = deref(xi);
 
@@ -1014,7 +1013,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 byte mode = codeBuffer.get(ip + 1);
                 int xi = getRegisterOrStackSlot(mode);
 
-                trace.fine(ip + ": UNIFY_LOCAL_VAL " + printSlot(xi, mode));
+                /*trace.fine(ip + ": UNIFY_LOCAL_VAL " + printSlot(xi, mode));*/
 
                 // switch mode
                 if (!writeMode)
@@ -1076,7 +1075,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // CP <- P + instruction_size(P)
                 cp = ip + 7;
 
-                trace.fine(ip + ": CALL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": CALL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");*/
 
                 // B0 <- B
                 b0 = bp;
@@ -1097,7 +1096,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // num_of_args <- n
                 numOfArgs = n;
 
-                trace.fine(ip + ": EXECUTE " + pn + "/" + n + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": EXECUTE " + pn + "/" + n + " (cp = " + cp + ")]");*/
 
                 // Ensure that the predicate to call is known and linked in, otherwise fail.
                 if (pn == -1)
@@ -1119,7 +1118,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             // proceed:
             case PROCEED:
             {
-                trace.fine(ip + ": PROCEED" + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": PROCEED" + " (cp = " + cp + ")]");*/
 
                 // P <- CP
                 ip = cp;
@@ -1148,8 +1147,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // newE <- E + n + 3
                 ep = esp;
 
-                trace.fine(ip + ": ALLOCATE");
-                trace.fine("-> env @ " + ep + " " + traceEnvFrame());
+                /*trace.fine(ip + ": ALLOCATE");*/
+                /*trace.fine("-> env @ " + ep + " " + traceEnvFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 1;
@@ -1181,8 +1180,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // newE <- E + n + 3
                 ep = esp;
 
-                trace.fine(ip + ": ALLOCATE_N " + n);
-                trace.fine("-> env @ " + ep + " " + traceEnvFrame());
+                /*trace.fine(ip + ": ALLOCATE_N " + n);*/
+                /*trace.fine("-> env @ " + ep + " " + traceEnvFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 2;
@@ -1198,8 +1197,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // E <- STACK[E]
                 ep = data.get(ep);
 
-                trace.fine(ip + ": DEALLOCATE");
-                trace.fine("<- env @ " + ep + " " + traceEnvFrame());
+                /*trace.fine(ip + ": DEALLOCATE");*/
+                /*trace.fine("<- env @ " + ep + " " + traceEnvFrame());*/
 
                 // CP <- STACK[E + 1]
                 cp = newip;
@@ -1259,8 +1258,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": TRY_ME_ELSE");
-                trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRY_ME_ELSE");*/
+                /*trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 5;
@@ -1304,8 +1303,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": RETRY_ME_ELSE");
-                trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": RETRY_ME_ELSE");*/
+                /*trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 5;
@@ -1346,8 +1345,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // B <- STACK[B + n + 3]
                 bp = data.get(bp + n + 3);
 
-                trace.fine(ip + ": TRUST_ME");
-                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRUST_ME");*/
+                /*trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- P + instruction_size(P)
                 ip += 1;
@@ -1503,8 +1502,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": TRY");
-                trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRY");*/
+                /*trace.fine("-> chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- L
                 ip = l;
@@ -1547,8 +1546,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // HB <- H
                 hbp = hp;
 
-                trace.fine(ip + ": RETRY");
-                trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": RETRY");*/
+                /*trace.fine("-- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- L
                 ip = l;
@@ -1591,8 +1590,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // B <- STACK[B + n + 3]
                 bp = data.get(bp + n + 3);
 
-                trace.fine(ip + ": TRUST");
-                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": TRUST");*/
+                /*trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 // P <- L
                 ip = l;
@@ -1608,8 +1607,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                     tidyTrail();
                 }
 
-                trace.fine(ip + ": NECK_CUT");
-                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": NECK_CUT");*/
+                /*trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 ip += 1;
 
@@ -1622,7 +1621,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
                 data.put(yn, b0);
 
-                trace.fine(ip + ": GET_LEVEL " + codeBuffer.get(ip + 1));
+                /*trace.fine(ip + ": GET_LEVEL " + codeBuffer.get(ip + 1));*/
 
                 ip += 2;
 
@@ -1641,8 +1640,8 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                     tidyTrail();
                 }
 
-                trace.fine(ip + ": CUT " + codeBuffer.get(ip + 1));
-                trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());
+                /*trace.fine(ip + ": CUT " + codeBuffer.get(ip + 1));*/
+                /*trace.fine("<- chp @ " + bp + " " + traceChoiceFrame());*/
 
                 ip += 2;
 
@@ -1654,7 +1653,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // grab L
                 int l = codeBuffer.getInt(ip + 1);
 
-                trace.fine(ip + ": CONTINUE " + l);
+                /*trace.fine(ip + ": CONTINUE " + l);*/
 
                 ip = l;
 
@@ -1663,7 +1662,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
             case NO_OP:
             {
-                trace.fine(ip + ": NO_OP");
+                /*trace.fine(ip + ": NO_OP");*/
 
                 ip += 1;
 
@@ -1681,7 +1680,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
                 // num_of_args <- n
                 numOfArgs = n;
 
-                trace.fine(ip + ": CALL_INTERNAL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");
+                /*trace.fine(ip + ": CALL_INTERNAL " + pn + "/" + n + ", " + numPerms + " (cp = " + cp + ")]");*/
 
                 boolean callOk = callInternal(pn, n, numPerms);
 
@@ -1693,7 +1692,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             // suspend on success:
             case SUSPEND:
             {
-                trace.fine(ip + ": SUSPEND");
+                /*trace.fine(ip + ": SUSPEND");*/
                 ip += 1;
                 suspended = true;
 
@@ -1849,7 +1848,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         // CP <- P + instruction_size(P)
         cp = ip + 7;
 
-        trace.fine(ip + ": (CALL) " + pn + ", " + numPerms + " (cp = " + cp + ")]");
+        /*trace.fine(ip + ": (CALL) " + pn + ", " + numPerms + " (cp = " + cp + ")]");*/
 
         // B0 <- B
         b0 = bp;
@@ -1875,7 +1874,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         }
 
         // Make the call.
-        trace.fine(ip + ": (EXECUTE) " + pn + " (cp = " + cp + ")]");
+        /*trace.fine(ip + ": (EXECUTE) " + pn + " (cp = " + cp + ")]");*/
 
         // B0 <- B
         b0 = bp;
@@ -1914,7 +1913,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
         }
         else
         {
-            trace.fine("call/1 not invoked against structure.");
+            /*trace.fine("call/1 not invoked against structure.");*/
 
             return -1;
         }
@@ -1926,7 +1925,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
 
         if (callPoint.entryPoint == -1)
         {
-            trace.fine("call/1 to unknown call point.");
+            /*trace.fine("call/1 to unknown call point.");*/
 
             return -1;
         }
