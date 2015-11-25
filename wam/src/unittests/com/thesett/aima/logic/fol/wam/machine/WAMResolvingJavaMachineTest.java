@@ -15,8 +15,6 @@
  */
 package com.thesett.aima.logic.fol.wam.machine;
 
-import com.thesett.aima.logic.fol.CallAndNotResolverUnitTestBase;
-import com.thesett.aima.logic.fol.CutResolverUnitTestBase;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -26,8 +24,10 @@ import org.apache.log4j.NDC;
 import com.thesett.aima.logic.fol.BacktrackingResolverUnitTestBase;
 import com.thesett.aima.logic.fol.BasicResolverUnitTestBase;
 import com.thesett.aima.logic.fol.BasicUnificationUnitTestBase;
+import com.thesett.aima.logic.fol.CallAndNotResolverUnitTestBase;
 import com.thesett.aima.logic.fol.Clause;
 import com.thesett.aima.logic.fol.ConjunctionResolverUnitTestBase;
+import com.thesett.aima.logic.fol.CutResolverUnitTestBase;
 import com.thesett.aima.logic.fol.DisjunctionResolverUnitTestBase;
 import com.thesett.aima.logic.fol.ListResolverUnitTestBase;
 import com.thesett.aima.logic.fol.LogicCompiler;

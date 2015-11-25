@@ -25,7 +25,6 @@ import com.thesett.aima.logic.fol.wam.compiler.WAMInstruction;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.WAMInstructionSet.Cut;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.WAMInstructionSet.NeckCut;
 import com.thesett.common.util.SizeableLinkedList;
-import com.thesett.common.util.doublemaps.SymbolKey;
 
 /**
  * Cut implements the prolog '!' operator, that prevents back-tracking within a functor. '!' is true; that is it does
@@ -98,12 +97,13 @@ public class Cut extends BaseBuiltIn
      * cut, in order that the choice point may be restored on the cut.
      *
      * <p/>A single instance of this variable is all that is needed, since it is only used temporarily during the
-     * compilation of clauses. This instance will be annotated by the symbol key initialization so that it can be found in
-     * the correct place within each clause; on compiling a new clause it will be re-initialized into that clauses symbol
-     * table.
+     * compilation of clauses. This instance will be annotated by the symbol key initialization so that it can be found
+     * in the correct place within each clause; on compiling a new clause it will be re-initialized into that clauses
+     * symbol table.
      *
-     * <p/><b>Note:</b> A singleton instance here will prevent the compiler from ever being multi-threaded, since clauses
-     * can no longer be compiled in parallel. This can be worked around easily by making this variable a thread local.
+     * <p/><b>Note:</b> A singleton instance here will prevent the compiler from ever being multi-threaded, since
+     * clauses can no longer be compiled in parallel. This can be worked around easily by making this variable a thread
+     * local.
      */
     public static class CutLevelVariable extends Variable
     {

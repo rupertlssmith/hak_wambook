@@ -194,14 +194,17 @@ public class ResolutionInterpreter<T, Q>
                         switch (directive)
                         {
                         case Trace:
+
                             /*log.fine("Got trace directive.");*/
                             break;
 
                         case Info:
+
                             /*log.fine("Got info directive.");*/
                             break;
 
                         case User:
+
                             /*log.fine("Got user directive, entering program mode.");*/
                             mode = Mode.Program;
                             break;
@@ -266,6 +269,7 @@ public class ResolutionInterpreter<T, Q>
 
                     // Parse the next clause.
                     Sentence<Clause> nextParsing = parser.parse();
+
                     /*log.fine(nextParsing.toString());*/
                     evaluate(nextParsing);
 

@@ -27,14 +27,13 @@ import com.thesett.aima.logic.fol.Variable;
 import com.thesett.aima.logic.fol.VariableAndFunctorInterner;
 import com.thesett.aima.logic.fol.bytecode.BaseMachine;
 import com.thesett.aima.logic.fol.wam.builtins.BuiltIn;
+import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
 import com.thesett.aima.search.QueueBasedSearchMethod;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.BreadthFirstSearch;
 import com.thesett.aima.search.util.uninformed.PostFixSearch;
 import com.thesett.common.util.SizeableLinkedList;
 import com.thesett.common.util.doublemaps.SymbolTable;
-
-import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
 
 /**
  * DefaultBuiltIn implements the standard WAM Prolog compilation for normal Prolog programs. Splitting this out into
