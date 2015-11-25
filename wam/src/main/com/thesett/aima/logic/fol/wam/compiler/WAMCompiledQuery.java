@@ -247,7 +247,7 @@ public class WAMCompiledQuery extends Clause<Functor> implements Sentence<WAMCom
         // Ensure that the size of the instruction listing does not exceed max int (highly unlikely).
         if (sizeof() > Integer.MAX_VALUE)
         {
-            throw new RuntimeException("The instruction listing size exceeds Integer.MAX_VALUE.");
+            throw new IllegalStateException("The instruction listing size exceeds Integer.MAX_VALUE.");
         }
 
         // Used to keep track of the size of the emitted code, in bytes, as it is written.

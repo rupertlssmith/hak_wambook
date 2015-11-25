@@ -223,7 +223,7 @@ public class L0UnifyingJavaMachine extends L0UnifyingMachine
 
                 default:
                 {
-                    throw new RuntimeException("Unkown tag type.");
+                    throw new IllegalStateException("Unkown tag type.");
                 }
                 }
 
@@ -288,7 +288,7 @@ public class L0UnifyingJavaMachine extends L0UnifyingMachine
 
             default:
             {
-                throw new RuntimeException("Unkown instruction type.");
+                throw new IllegalStateException("Unkown instruction type.");
             }
             }
         }

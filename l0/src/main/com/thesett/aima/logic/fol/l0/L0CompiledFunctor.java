@@ -236,7 +236,7 @@ public abstract class L0CompiledFunctor extends Functor implements L0CompiledTer
 
             default:
             {
-                throw new RuntimeException("Unknown instruction.");
+                throw new IllegalStateException("Unknown instruction.");
             }
             }
         }

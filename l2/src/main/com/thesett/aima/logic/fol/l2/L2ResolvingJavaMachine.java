@@ -439,7 +439,7 @@ public class L2ResolvingJavaMachine extends L2ResolvingMachine
 
                 default:
                 {
-                    throw new RuntimeException("Unkown tag type.");
+                    throw new IllegalStateException("Unkown tag type.");
                 }
                 }
 

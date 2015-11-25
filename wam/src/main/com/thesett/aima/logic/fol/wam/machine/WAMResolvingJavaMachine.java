@@ -1821,7 +1821,7 @@ public class WAMResolvingJavaMachine extends WAMResolvingMachine
             return internalExecute_1();
 
         default:
-            throw new RuntimeException("Unknown internal function id: " + function);
+            throw new IllegalStateException("Unknown internal function id: " + function);
         }
     }
 

@@ -65,7 +65,7 @@ public abstract class L2ResolvingMachine extends L2BaseMachine implements Resolv
         // Reject the domain term if it is a query, as queries have no head to match.
         if (term.isQuery())
         {
-            throw new RuntimeException("Cannot add queries to the domain.");
+            throw new IllegalStateException("Cannot add queries to the domain.");
         }
 
         // Emmit code for the term into this machine.
@@ -80,7 +80,7 @@ public abstract class L2ResolvingMachine extends L2BaseMachine implements Resolv
         // Reject the query if it has a head, and hence is a program and not a query.
         if (!query.isQuery())
         {
-            throw new RuntimeException("Cannot run programs that are not queries, as queries.");
+            throw new IllegalStateException("Cannot run programs that are not queries, as queries.");
         }
 
         // Emmit code for the clause into this machine.
@@ -96,7 +96,7 @@ public abstract class L2ResolvingMachine extends L2BaseMachine implements Resolv
         // Check that a query has been set to resolve.
         if (currentQuery == null)
         {
-            throw new RuntimeException("No query set to resolve.");
+            throw new IllegalStateException("No query set to resolve.");
         }
 
         // Execute the byte code, starting from the first functor of the query.

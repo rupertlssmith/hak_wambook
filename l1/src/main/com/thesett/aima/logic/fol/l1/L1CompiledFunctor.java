@@ -288,7 +288,7 @@ public abstract class L1CompiledFunctor extends Functor implements L1CompiledTer
             // Ensure that the query really does end with a call.
             if (code[addr] != CALL)
             {
-                throw new RuntimeException("Call instructions should be the last instruction of a query.");
+                throw new IllegalStateException("Call instructions should be the last instruction of a query.");
             }
 
             // Skip the call instruction and call offset.
@@ -527,7 +527,7 @@ public abstract class L1CompiledFunctor extends Functor implements L1CompiledTer
 
             default:
             {
-                throw new RuntimeException("Unkown instruction type.");
+                throw new IllegalStateException("Unkown instruction type.");
             }
             }
 
@@ -595,7 +595,7 @@ public abstract class L1CompiledFunctor extends Functor implements L1CompiledTer
 
         default:
         {
-            throw new RuntimeException("Unkown instruction type.");
+            throw new IllegalStateException("Unkown instruction type.");
         }
         }
     }

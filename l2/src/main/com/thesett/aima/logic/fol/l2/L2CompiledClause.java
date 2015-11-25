@@ -212,7 +212,7 @@ public class L2CompiledClause extends Clause<Functor> implements Sentence<L2Comp
         // Ensure that the size of the instruction listing does not exceed max int (highly unlikely).
         if (sizeof() > Integer.MAX_VALUE)
         {
-            throw new RuntimeException("The instruction listing size exceeds Integer.MAX_VALUE.");
+            throw new IllegalStateException("The instruction listing size exceeds Integer.MAX_VALUE.");
         }
 
         // Used to keep track of the size of the emmitted code, in bytes, as it is written.

@@ -101,7 +101,7 @@ public class WAMEngine extends ResolutionEngine<Clause, WAMCompiledPredicate, WA
         {
             // There should not be any errors in the built in library, if there are then the prolog engine just
             // isn't going to work, so report this as a bug.
-            throw new RuntimeException("Got an exception whilst loading the built-in library.", e);
+            throw new IllegalStateException("Got an exception whilst loading the built-in library.", e);
         }
     }
 }
