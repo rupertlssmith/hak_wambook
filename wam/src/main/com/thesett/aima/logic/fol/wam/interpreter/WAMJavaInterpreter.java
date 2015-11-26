@@ -62,7 +62,7 @@ public class WAMJavaInterpreter
         {
             SymbolTableImpl<Integer, String, Object> symbolTable = new SymbolTableImpl<Integer, String, Object>();
 
-            final WAMResolvingMachine machine = new WAMResolvingJavaMachine(symbolTable);
+            WAMResolvingMachine machine = new WAMResolvingJavaMachine(symbolTable);
 
             Parser<Clause, Token> parser = new InteractiveParser(machine);
 

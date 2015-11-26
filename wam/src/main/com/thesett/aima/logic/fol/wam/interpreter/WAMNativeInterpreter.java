@@ -62,7 +62,7 @@ public class WAMNativeInterpreter
         {
             SymbolTableImpl<Integer, String, Object> symbolTable = new SymbolTableImpl<Integer, String, Object>();
 
-            final WAMResolvingMachine machine = new WAMResolvingNativeMachine(symbolTable);
+            WAMResolvingMachine machine = new WAMResolvingNativeMachine(symbolTable);
 
             Parser<Clause, Token> parser = new SentenceParser(machine);
             parser.setTokenSource(TokenSource.getTokenSourceForInputStream(System.in));
