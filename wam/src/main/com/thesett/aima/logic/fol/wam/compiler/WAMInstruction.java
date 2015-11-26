@@ -1223,7 +1223,7 @@ public class WAMInstruction implements Sizeable
         };
 
         /** Holds a mapping of the instruction by byte code. */
-        private static Map<Byte, WAMInstructionSet> codeToValue = new HashMap<Byte, WAMInstructionSet>();
+        private static final Map<Byte, WAMInstructionSet> codeToValue = new HashMap<Byte, WAMInstructionSet>();
 
         static
         {

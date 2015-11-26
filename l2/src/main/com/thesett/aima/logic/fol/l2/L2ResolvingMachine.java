@@ -52,7 +52,7 @@ public abstract class L2ResolvingMachine extends L2BaseMachine implements Resolv
     /* private static final Logger log = Logger.getLogger(L2ResolvingMachine.class.getName()); */
 
     /** Static counter for inventing new variable names. */
-    protected static AtomicInteger varNameId = new AtomicInteger();
+    protected static final AtomicInteger varNameId = new AtomicInteger();
 
     /** Holds the most recently set query, to run when the resolution search is invoked. */
     L2CompiledClause currentQuery;

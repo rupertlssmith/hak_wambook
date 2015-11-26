@@ -486,7 +486,7 @@ public class L3Instruction implements Sizeable
         };
 
         /** Holds a mapping of the instruction by byte code. */
-        private static Map<Byte, L3InstructionSet> codeToValue = new HashMap<Byte, L3InstructionSet>();
+        private static final Map<Byte, L3InstructionSet> codeToValue = new HashMap<Byte, L3InstructionSet>();
 
         static
         {

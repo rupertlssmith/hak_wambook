@@ -51,10 +51,10 @@ import static com.thesett.aima.logic.fol.l1.L1InstructionSet.REF;
 public abstract class L1UnifyingMachine extends L1BaseMachine implements Unifier<L1CompiledFunctor>
 {
     /** Used for debugging. */
-    private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(L1UnifyingMachine.class.getName());
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(L1UnifyingMachine.class.getName());
 
     /** Static counter for inventing new variable names. */
-    protected static AtomicInteger varNameId = new AtomicInteger();
+    protected static final AtomicInteger varNameId = new AtomicInteger();
 
     /**
      * Unifies a query against the programs stored in the machine and produces a list of bound variables that form the

@@ -53,7 +53,7 @@ public abstract class L3ResolvingMachine extends L3BaseMachine implements Resolv
     /* private static final Logger log = Logger.getLogger(L3ResolvingMachine.class.getName()); */
 
     /** Static counter for inventing new variable names. */
-    protected static AtomicInteger varNameId = new AtomicInteger();
+    protected static final AtomicInteger varNameId = new AtomicInteger();
 
     /** Holds the most recently set query, to run when the resolution search is invoked. */
     L3CompiledQuery currentQuery;

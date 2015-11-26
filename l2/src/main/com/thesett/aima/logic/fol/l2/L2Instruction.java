@@ -570,7 +570,7 @@ public class L2Instruction implements Sizeable
         };
 
         /** Holds a mapping of the instruction by byte code. */
-        private static Map<Byte, L2InstructionSet> codeToValue = new HashMap<Byte, L2InstructionSet>();
+        private static final Map<Byte, L2InstructionSet> codeToValue = new HashMap<Byte, L2InstructionSet>();
 
         static
         {
