@@ -135,7 +135,7 @@ public class TermWalkers
      *
      * @return A walk over a term, that finds all conjunction and disjunction operators.
      */
-    public static TermWalker conjunctionAndDisjunctionOpSymbolWalker(PositionalTermVisitor visitor)
+    public static TermWalker conjunctionAndDisjunctionOpSymbolWalker(TermVisitor visitor)
     {
         //return positionalGoalWalker(CONJ_DISJ_OP_SYMBOL_PREDICATE, visitor);
         return goalWalker(CONJ_DISJ_OP_SYMBOL_PREDICATE, visitor);

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.thesett.aima.logic.fol.FunctorName;
 import com.thesett.aima.logic.fol.LinkageException;
+import com.thesett.aima.logic.fol.VariableAndFunctorInterner;
 import com.thesett.common.util.ByteBufferUtils;
 import com.thesett.common.util.Sizeable;
 import com.thesett.common.util.SizeableLinkedList;
@@ -644,7 +645,7 @@ public class L3Instruction implements Sizeable
          * @param machine     The binary machine to write the code into.
          */
         private static void emmitCodeReg1Fn(byte[] codeBuf, byte code, int ip, L3Instruction instruction,
-            L3Machine machine)
+            VariableAndFunctorInterner machine)
         {
             codeBuf[ip] = code;
             codeBuf[ip + 1] = instruction.mode1;
@@ -701,7 +702,7 @@ public class L3Instruction implements Sizeable
          * @param instruction The instruction to store the disassembles arguments in.
          * @param machine     The binary machine to disassemble from.
          */
-        private static void disassembleReg1Fn(byte[] code, int ip, L3Instruction instruction, L3Machine machine)
+        private static void disassembleReg1Fn(byte[] code, int ip, L3Instruction instruction, VariableAndFunctorInterner machine)
         {
             //instruction.mode1 = code[ip + 1];
             instruction.reg1 = code[ip + 1];

@@ -109,7 +109,7 @@ public class PreCompiler extends BaseMachine implements LogicCompiler<Clause, Cl
      *
      * @param clause The clause to transform.
      */
-    private void substituteBuiltIns(Clause clause)
+    private void substituteBuiltIns(Term clause)
     {
         TermWalker walk =
             TermWalkers.positionalWalker(new BuiltInTransformVisitor(interner, symbolTable, null, builtInTransform));
@@ -122,7 +122,7 @@ public class PreCompiler extends BaseMachine implements LogicCompiler<Clause, Cl
      *
      * @param clause The clause to initialise the symbol keys of.
      */
-    private void initialiseSymbolTable(Clause clause)
+    private void initialiseSymbolTable(Term clause)
     {
         // Run the symbol key traverser over the clause, to ensure that all terms have their symbol keys correctly
         // set up.
@@ -139,7 +139,7 @@ public class PreCompiler extends BaseMachine implements LogicCompiler<Clause, Cl
      *
      * @param clause The clause to top-level check.
      */
-    private void topLevelCheck(Clause clause)
+    private void topLevelCheck(Term clause)
     {
         TermWalker walk = TermWalkers.positionalWalker(new TopLevelCheckVisitor(interner, symbolTable, null));
         walk.walk(clause);

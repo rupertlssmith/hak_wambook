@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.wam.compiler;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import com.thesett.aima.logic.fol.Functor;
 import com.thesett.aima.logic.fol.FunctorName;
 import com.thesett.aima.logic.fol.LogicCompiler;
 import com.thesett.aima.logic.fol.LogicCompilerObserver;
+import com.thesett.aima.logic.fol.PositionalTermVisitor;
 import com.thesett.aima.logic.fol.Sentence;
 import com.thesett.aima.logic.fol.Term;
 import com.thesett.aima.logic.fol.TermUtils;
@@ -56,11 +58,13 @@ import com.thesett.aima.logic.fol.wam.printer.WAMCompiledPredicatePrintingVisito
 import com.thesett.aima.logic.fol.wam.printer.WAMCompiledQueryPrintingVisitor;
 import com.thesett.aima.logic.fol.wam.printer.WAMCompiledTermsPrintingVisitor;
 import com.thesett.aima.search.QueueBasedSearchMethod;
+import com.thesett.aima.search.SearchMethod;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.backtracking.DepthFirstBacktrackingSearch;
 import com.thesett.aima.search.util.uninformed.BreadthFirstSearch;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.SizeableLinkedList;
+import com.thesett.common.util.SizeableList;
 import com.thesett.common.util.doublemaps.SymbolKey;
 import com.thesett.common.util.doublemaps.SymbolTable;
 
@@ -295,7 +299,7 @@ public class InstructionCompiler extends DefaultBuiltIn
             // Check in the symbol table, if a compiled predicate with name matching the program clause exists, and if
             // not create it.
             SymbolKey predicateKey = scopeTable.getSymbolKey(clause.getHead().getName());
-            List<Clause> clauseList = (List<Clause>) scopeTable.get(predicateKey, SymbolTableKeys.SYMKEY_PREDICATES);
+            Collection<Clause> clauseList = (List<Clause>) scopeTable.get(predicateKey, SymbolTableKeys.SYMKEY_PREDICATES);
 
             if (clauseList == null)
             {
@@ -350,12 +354,12 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         // These are used to generate pre and post instructions for the clause, for example, for the creation and
         // clean-up of stack frames.
-        SizeableLinkedList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
-        SizeableLinkedList<WAMInstruction> postFixInstructions = new SizeableLinkedList<WAMInstruction>();
+        SizeableList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
+        SizeableList<WAMInstruction> postFixInstructions = new SizeableLinkedList<WAMInstruction>();
 
         // Find all the free non-anonymous variables in the clause.
         Set<Variable> freeVars = TermUtils.findFreeNonAnonymousVariables(clause);
-        Set<Integer> freeVarNames = new TreeSet<Integer>();
+        Collection<Integer> freeVarNames = new TreeSet<Integer>();
 
         for (Variable var : freeVars)
         {
@@ -507,8 +511,8 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         // These are used to generate pre and post instructions for the clause, for example, for the creation and
         // clean-up of stack frames.
-        SizeableLinkedList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
-        SizeableLinkedList<WAMInstruction> postFixInstructions = new SizeableLinkedList<WAMInstruction>();
+        SizeableList<WAMInstruction> preFixInstructions = new SizeableLinkedList<WAMInstruction>();
+        SizeableList<WAMInstruction> postFixInstructions = new SizeableLinkedList<WAMInstruction>();
 
         // Find all the free non-anonymous variables in the clause.
         Set<Variable> freeVars = TermUtils.findFreeNonAnonymousVariables(clause);
@@ -645,7 +649,7 @@ public class InstructionCompiler extends DefaultBuiltIn
 
         // Program instructions are generated in the same order as the registers are assigned, the postfix
         // ordering used for queries is not needed.
-        QueueBasedSearchMethod<Term, Term> outInSearch = new BreadthFirstSearch<Term, Term>();
+        SearchMethod outInSearch = new BreadthFirstSearch<Term, Term>();
         outInSearch.reset();
         outInSearch.addStartState(expression);
 
@@ -746,7 +750,7 @@ public class InstructionCompiler extends DefaultBuiltIn
             }
             else if (j < numOutermostArgs)
             {
-                Variable nextVar = (Variable) nextTerm;
+                Term nextVar = (Variable) nextTerm;
                 int allocation = (Integer) symbolTable.get(nextVar.getSymbolKey(), SymbolTableKeys.SYMKEY_ALLOCATION);
                 byte addrMode = (byte) ((allocation & 0xff00) >> 8);
                 byte address = (byte) (allocation & 0xff);
@@ -810,7 +814,7 @@ public class InstructionCompiler extends DefaultBuiltIn
         Map<Variable, Integer> lastBodyMap = new HashMap<Variable, Integer>();
 
         // Holds the variable that are in the head and first clause body argument.
-        Set<Variable> firstGroupVariables = new HashSet<Variable>();
+        Collection<Variable> firstGroupVariables = new HashSet<Variable>();
 
         // Get the occurrence counts of variables in all clauses after the initial head and first body grouping.
         // In the same pass, pick out which body variables last occur in.
@@ -931,7 +935,7 @@ public class InstructionCompiler extends DefaultBuiltIn
      * @param clause   The clause to allocate registers for.
      * @param varNames A map of permanent variables to variable names to record the allocations in.
      */
-    private void allocatePermanentQueryRegisters(Clause clause, Map<Byte, Integer> varNames)
+    private void allocatePermanentQueryRegisters(Term clause, Map<Byte, Integer> varNames)
     {
         // Allocate local variable slots for all variables in a query.
         QueryRegisterAllocatingVisitor allocatingVisitor =
@@ -951,7 +955,7 @@ public class InstructionCompiler extends DefaultBuiltIn
      *
      * @param clause The clause to check the variable occurrence and position of occurrence within.
      */
-    private void gatherPositionAndOccurrenceInfo(Clause clause)
+    private void gatherPositionAndOccurrenceInfo(Term clause)
     {
         PositionalTermTraverser positionalTraverser = new PositionalTermTraverserImpl();
         PositionAndOccurrenceVisitor positionAndOccurrenceVisitor =
@@ -970,12 +974,12 @@ public class InstructionCompiler extends DefaultBuiltIn
      *
      * @param predicate The compiled predicate to pretty print.
      */
-    private void displayCompiledPredicate(WAMCompiledPredicate predicate)
+    private void displayCompiledPredicate(Term predicate)
     {
         // Pretty print the clause.
         StringBuffer result = new StringBuffer();
 
-        WAMCompiledTermsPrintingVisitor displayVisitor =
+        PositionalTermVisitor displayVisitor =
             new WAMCompiledPredicatePrintingVisitor(interner, symbolTable, result);
 
         TermWalkers.positionalWalker(displayVisitor).walk(predicate);
@@ -988,12 +992,12 @@ public class InstructionCompiler extends DefaultBuiltIn
      *
      * @param query The compiled query to pretty print.
      */
-    private void displayCompiledQuery(WAMCompiledQuery query)
+    private void displayCompiledQuery(Term query)
     {
         // Pretty print the clause.
         StringBuffer result = new StringBuffer();
 
-        WAMCompiledTermsPrintingVisitor displayVisitor =
+        PositionalTermVisitor displayVisitor =
             new WAMCompiledQueryPrintingVisitor(interner, symbolTable, result);
 
         TermWalkers.positionalWalker(displayVisitor).walk(query);

@@ -108,7 +108,7 @@ public class Cut extends BaseBuiltIn
     public static class CutLevelVariable extends Variable
     {
         /** The single cut level variable instance. */
-        public static final CutLevelVariable CUT_LEVEL_VARIABLE = new CutLevelVariable();
+        public static final Term CUT_LEVEL_VARIABLE = new CutLevelVariable();
 
         /** Private constructor to prevent instantiation other than the singleton. */
         CutLevelVariable()

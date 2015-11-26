@@ -15,6 +15,7 @@
  */
 package com.thesett.aima.logic.fol.l1;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import static com.thesett.aima.logic.fol.l1.L1InstructionSet.SET_VAR;
 import static com.thesett.aima.logic.fol.l1.L1InstructionSet.UNIFY_VAL;
 import static com.thesett.aima.logic.fol.l1.L1InstructionSet.UNIFY_VAR;
 import com.thesett.aima.search.QueueBasedSearchMethod;
+import com.thesett.aima.search.SearchMethod;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.BreadthFirstSearch;
 import com.thesett.aima.search.util.uninformed.PostFixSearch;
@@ -217,7 +219,7 @@ public class L1Compiler implements LogicCompiler<Term, L1CompiledFunctor, L1Comp
         // Need to assign registers to the whole syntax tree, working in from the outermost functor. The outermost
         // functor itself is not assigned to a register in l1 (only in l0). Functors already directly assigned to
         // argument registers will not be re-assigned by this, variables as arguments will be assigned.
-        QueueBasedSearchMethod<Term, Term> outInSearch = new BreadthFirstSearch<Term, Term>();
+        SearchMethod outInSearch = new BreadthFirstSearch<Term, Term>();
         outInSearch.reset();
         outInSearch.addStartState(expression);
 
@@ -252,7 +254,7 @@ public class L1Compiler implements LogicCompiler<Term, L1CompiledFunctor, L1Comp
         if (sentence instanceof L1Sentence.L1Query)
         {
             // This is used to keep track of variables as they are seen.
-            Set<Variable> seenVars = new HashSet<Variable>();
+            Collection<Variable> seenVars = new HashSet<Variable>();
 
             // Loop over all of the arguments to the outermost functor.
             int numOutermostArgs = expression.getArity();
@@ -290,7 +292,7 @@ public class L1Compiler implements LogicCompiler<Term, L1CompiledFunctor, L1Comp
                 // When a functor is encountered, output a put_struc.
                 else if (nextOutermostArg.isFunctor())
                 {
-                    Functor nextFunctorArg = (Functor) nextOutermostArg;
+                    Term nextFunctorArg = (Functor) nextOutermostArg;
 
                     // Heap cells are to be created in an order such that no heap cell can appear before other cells that it
                     // refers to. A postfix traversal of the functors in the term to compile is used to achieve this, as
@@ -375,7 +377,7 @@ public class L1Compiler implements LogicCompiler<Term, L1CompiledFunctor, L1Comp
             treeWalker = Searches.allSolutions(outInSearch);
 
             // This is used to keep track of registers as they are seen.
-            Set<Integer> seenRegisters = new HashSet<Integer>();
+            Collection<Integer> seenRegisters = new HashSet<Integer>();
 
             // Skip the outermost functor.
             treeWalker.next();
@@ -439,7 +441,7 @@ public class L1Compiler implements LogicCompiler<Term, L1CompiledFunctor, L1Comp
                 }
                 else if (j < numOutermostArgs)
                 {
-                    Variable nextFunctor = (Variable) nextTerm;
+                    Term nextFunctor = (Variable) nextTerm;
                     int registerRef = nextFunctor.getAllocation();
 
                     // If it is register not seen before: get_var.

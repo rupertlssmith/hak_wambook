@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.l2;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -154,7 +155,7 @@ public class L2CompiledClause extends Clause<Functor> implements Sentence<L2Comp
      *
      * @param instructions The instructions to add to the clause.
      */
-    public void addInstructions(SizeableList<L2Instruction> instructions)
+    public void addInstructions(Collection<L2Instruction> instructions)
     {
         this.instructions.addAll(instructions);
     }
@@ -184,7 +185,7 @@ public class L2CompiledClause extends Clause<Functor> implements Sentence<L2Comp
      *
      * @return The set of variables in the clause that are not anonymous or bound.
      */
-    public Set<Integer> getNonAnonymousFreeVariables()
+    public Collection<Integer> getNonAnonymousFreeVariables()
     {
         return nonAnonymousFreeVariables;
     }

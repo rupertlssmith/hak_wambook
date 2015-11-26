@@ -17,6 +17,7 @@ package com.thesett.aima.logic.fol.wam.compiler;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +152,7 @@ public class WAMCompiledPredicate extends Predicate<Clause> implements Sentence<
      *
      * @param instructions The instructions to add to the clause.
      */
-    public void addInstructions(SizeableList<WAMInstruction> instructions)
+    public void addInstructions(Collection<WAMInstruction> instructions)
     {
         this.instructions.addAll(instructions);
     }

@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.wam.printer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.thesett.aima.logic.fol.AllTermsVisitor;
@@ -63,7 +64,7 @@ public abstract class WAMCompiledTermsPrintingVisitor extends DelegatingAllTerms
     private final StringBuffer result;
 
     /** Holds a list of all column printers to apply. */
-    List<AllTermsVisitor> printers = new ArrayList<AllTermsVisitor>();
+    Collection<AllTermsVisitor> printers = new ArrayList<AllTermsVisitor>();
 
     /** Holds the table model to render the output to. */
     TextTableModel printTable = new TextTableImpl();

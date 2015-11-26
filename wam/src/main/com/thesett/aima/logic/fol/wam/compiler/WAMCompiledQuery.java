@@ -17,6 +17,7 @@ package com.thesett.aima.logic.fol.wam.compiler;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,7 @@ public class WAMCompiledQuery extends Clause<Functor> implements Sentence<WAMCom
      *
      * @param instructions The instructions to add to the clause.
      */
-    public void addInstructions(SizeableList<WAMInstruction> instructions)
+    public void addInstructions(Collection<WAMInstruction> instructions)
     {
         this.instructions.addAll(instructions);
     }
@@ -192,7 +193,7 @@ public class WAMCompiledQuery extends Clause<Functor> implements Sentence<WAMCom
      *
      * @return The set of variables in the clause that are not anonymous or bound.
      */
-    public Set<Integer> getNonAnonymousFreeVariables()
+    public Collection<Integer> getNonAnonymousFreeVariables()
     {
         return nonAnonymousFreeVariables;
     }

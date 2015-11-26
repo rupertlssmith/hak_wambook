@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.l3;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +146,7 @@ public class L3CompiledPredicate extends Predicate<Clause> implements Sentence<L
      *
      * @param instructions The instructions to add to the clause.
      */
-    public void addInstructions(SizeableList<L3Instruction> instructions)
+    public void addInstructions(Collection<L3Instruction> instructions)
     {
         this.instructions.addAll(instructions);
     }
@@ -191,7 +192,7 @@ public class L3CompiledPredicate extends Predicate<Clause> implements Sentence<L
      *
      * @return A list of the byte code instructions for this predicate.
      */
-    public List<L3Instruction> getInstructions()
+    public Iterable<L3Instruction> getInstructions()
     {
         return Collections.unmodifiableList(instructions);
     }

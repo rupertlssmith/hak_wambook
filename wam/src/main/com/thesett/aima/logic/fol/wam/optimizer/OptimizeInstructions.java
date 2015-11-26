@@ -16,6 +16,8 @@
 package com.thesett.aima.logic.fol.wam.optimizer;
 
 import static java.lang.Boolean.TRUE;
+
+import java.util.Deque;
 import java.util.LinkedList;
 
 import com.thesett.aima.logic.fol.FunctorName;
@@ -74,7 +76,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
     private State state = State.NM;
 
     /** Holds a buffer of pending instructions to output. */
-    private final LinkedList<WAMInstruction> buffer = new LinkedList<WAMInstruction>();
+    private final Deque<WAMInstruction> buffer = new LinkedList<WAMInstruction>();
 
     /** The symbol table. */
     protected final SymbolTable<Integer, String, Object> symbolTable;

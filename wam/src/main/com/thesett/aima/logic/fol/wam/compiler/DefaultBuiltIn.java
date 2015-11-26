@@ -15,6 +15,7 @@
  */
 package com.thesett.aima.logic.fol.wam.compiler;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,6 +30,7 @@ import com.thesett.aima.logic.fol.bytecode.BaseMachine;
 import com.thesett.aima.logic.fol.wam.builtins.BuiltIn;
 import static com.thesett.aima.logic.fol.wam.compiler.WAMInstruction.REG_ADDR;
 import com.thesett.aima.search.QueueBasedSearchMethod;
+import com.thesett.aima.search.SearchMethod;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.uninformed.BreadthFirstSearch;
 import com.thesett.aima.search.util.uninformed.PostFixSearch;
@@ -70,7 +72,7 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
     }
 
     /** This is used to keep track of registers as they are seen. */
-    protected Set<Integer> seenRegisters = new TreeSet<Integer>();
+    protected Collection<Integer> seenRegisters = new TreeSet<Integer>();
 
     /** Used to keep track of the temporary register assignment across multiple functors within a clause. */
     protected int lastAllocatedTempReg;
@@ -198,7 +200,7 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
             // When a functor is encountered, output a put_struc.
             else if (nextOutermostArg.isFunctor())
             {
-                Functor nextFunctorArg = (Functor) nextOutermostArg;
+                Term nextFunctorArg = (Functor) nextOutermostArg;
 
                 // Heap cells are to be created in an order such that no heap cell can appear before other cells that it
                 // refers to. A postfix traversal of the functors in the term to compile is used to achieve this, as
@@ -334,12 +336,12 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
      *
      * @param expression The expression to walk over.
      */
-    protected void allocateTemporaryRegisters(Functor expression)
+    protected void allocateTemporaryRegisters(Term expression)
     {
         // Need to assign registers to the whole syntax tree, working in from the outermost functor. The outermost
         // functor itself is not assigned to a register in l3 (only in l0). Functors already directly assigned to
         // argument registers will not be re-assigned by this, variables as arguments will be assigned.
-        QueueBasedSearchMethod<Term, Term> outInSearch = new BreadthFirstSearch<Term, Term>();
+        SearchMethod outInSearch = new BreadthFirstSearch<Term, Term>();
         outInSearch.reset();
         outInSearch.addStartState(expression);
 
@@ -402,7 +404,7 @@ public class DefaultBuiltIn extends BaseMachine implements BuiltIn
      * @return <tt>true</tt> iff this is the last body functor that the variable appears in and does so only in argument
      *         position.
      */
-    private boolean isLastBodyTermInArgPositionOnly(Variable var, Functor body)
+    private boolean isLastBodyTermInArgPositionOnly(Term var, Functor body)
     {
         return body == symbolTable.get(var.getSymbolKey(), SymbolTableKeys.SYMKEY_VAR_LAST_ARG_FUNCTOR);
     }

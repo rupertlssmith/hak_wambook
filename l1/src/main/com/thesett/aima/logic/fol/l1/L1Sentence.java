@@ -44,7 +44,7 @@ public class L1Sentence implements Sentence<Term>
      *
      * @return An L1 sentence for the declared term.
      */
-    public static L1Sentence createProgram(Functor f)
+    public static Sentence createProgram(Functor f)
     {
         return new L1Program(f);
     }
@@ -56,7 +56,7 @@ public class L1Sentence implements Sentence<Term>
      *
      * @return An L1 sentence for the query.
      */
-    public static L1Sentence createQuery(Functor f)
+    public static Sentence createQuery(Functor f)
     {
         return new L1Query(f);
     }

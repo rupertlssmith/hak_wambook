@@ -23,6 +23,7 @@ import com.thesett.aima.logic.fol.wam.compiler.WAMCompiledPredicate;
 import com.thesett.aima.logic.fol.wam.compiler.WAMCompiledQuery;
 import com.thesett.aima.logic.fol.wam.compiler.WAMInstruction;
 import com.thesett.aima.logic.fol.wam.compiler.WAMLabel;
+import com.thesett.aima.logic.fol.wam.compiler.WAMOptimizeableListing;
 import com.thesett.common.util.doublemaps.SymbolTable;
 import com.thesett.text.api.model.TextTableModel;
 
@@ -59,7 +60,7 @@ public class UnoptimizedLabelPrinter extends BasePrinter
     {
         if (clause instanceof WAMCompiledQuery)
         {
-            WAMCompiledQuery query = (WAMCompiledQuery) clause;
+            WAMOptimizeableListing query = (WAMCompiledQuery) clause;
 
             for (WAMInstruction instruction : query.getUnoptimizedInstructions())
             {
@@ -75,7 +76,7 @@ public class UnoptimizedLabelPrinter extends BasePrinter
     {
         if (predicate instanceof WAMCompiledPredicate)
         {
-            WAMCompiledPredicate compiledPredicate = (WAMCompiledPredicate) predicate;
+            WAMOptimizeableListing compiledPredicate = (WAMCompiledPredicate) predicate;
 
             for (WAMInstruction instruction : compiledPredicate.getUnoptimizedInstructions())
             {

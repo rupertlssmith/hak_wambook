@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.l3;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public abstract class L3CompiledTermsPrintingVisitor extends DelegatingAllTermsV
     Map<Integer, Integer> maxColumnSizes = new HashMap<Integer, Integer>();
 
     /** Holds a list of all column printers to apply. */
-    List<AllTermsVisitor> printers = new ArrayList<AllTermsVisitor>();
+    Collection<AllTermsVisitor> printers = new ArrayList<AllTermsVisitor>();
 
     /** Used to count the maximum row with data in it. */
     int maxRows;

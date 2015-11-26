@@ -257,7 +257,7 @@ public class InternalRegisterBean extends WAMInternalRegisters implements Regist
      *
      * @param changes The list of property changes to fire off.
      */
-    private void notifyChanges(List<PropertyChangeEvent> changes)
+    private void notifyChanges(Iterable<PropertyChangeEvent> changes)
     {
         List<PropertyChangeListener> activeListeners = listeners.getActiveListeners();
 

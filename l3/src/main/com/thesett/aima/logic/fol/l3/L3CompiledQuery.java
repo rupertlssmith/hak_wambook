@@ -16,6 +16,7 @@
 package com.thesett.aima.logic.fol.l3;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +157,7 @@ public class L3CompiledQuery extends Clause<Functor> implements Sentence<L3Compi
      *
      * @param instructions The instructions to add to the clause.
      */
-    public void addInstructions(SizeableList<L3Instruction> instructions)
+    public void addInstructions(Collection<L3Instruction> instructions)
     {
         this.instructions.addAll(instructions);
     }
@@ -186,7 +187,7 @@ public class L3CompiledQuery extends Clause<Functor> implements Sentence<L3Compi
      *
      * @return The set of variables in the clause that are not anonymous or bound.
      */
-    public Set<Integer> getNonAnonymousFreeVariables()
+    public Collection<Integer> getNonAnonymousFreeVariables()
     {
         return nonAnonymousFreeVariables;
     }
@@ -202,7 +203,7 @@ public class L3CompiledQuery extends Clause<Functor> implements Sentence<L3Compi
      *
      * @return A list of the byte code instructions for this query.
      */
-    public List<L3Instruction> getInstructions()
+    public Iterable<L3Instruction> getInstructions()
     {
         return Collections.unmodifiableList(instructions);
     }

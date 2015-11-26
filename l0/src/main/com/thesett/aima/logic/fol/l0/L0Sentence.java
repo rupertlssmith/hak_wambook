@@ -44,7 +44,7 @@ public class L0Sentence implements Sentence<Term>
      *
      * @return An L0 sentence for the declared term.
      */
-    public static L0Sentence createProgram(Functor f)
+    public static Sentence createProgram(Functor f)
     {
         return new L0Program(f);
     }
@@ -56,7 +56,7 @@ public class L0Sentence implements Sentence<Term>
      *
      * @return An L0 sentence for the query.
      */
-    public static L0Sentence createQuery(Functor f)
+    public static Sentence createQuery(Functor f)
     {
         return new L0Query(f);
     }

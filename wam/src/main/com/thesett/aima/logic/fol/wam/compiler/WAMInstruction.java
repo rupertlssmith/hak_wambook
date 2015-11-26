@@ -1434,7 +1434,7 @@ public class WAMInstruction implements Sizeable
          * @param interner    The binary machine to write the code into.
          */
         private static void emmitCodeReg1Fn(ByteBuffer codeBuf, byte code, WAMInstruction instruction,
-            WAMMachine interner)
+            VariableAndFunctorInterner interner)
         {
             codeBuf.put(code);
             codeBuf.put(instruction.mode1);
@@ -1454,7 +1454,7 @@ public class WAMInstruction implements Sizeable
          * @param instruction The instruction, including its arguments.
          * @param interner    The binary machine to write the code into.
          */
-        private static void emmitCodeFn(ByteBuffer codeBuf, byte code, WAMInstruction instruction, WAMMachine interner)
+        private static void emmitCodeFn(ByteBuffer codeBuf, byte code, WAMInstruction instruction, VariableAndFunctorInterner interner)
         {
             codeBuf.put(code);
 

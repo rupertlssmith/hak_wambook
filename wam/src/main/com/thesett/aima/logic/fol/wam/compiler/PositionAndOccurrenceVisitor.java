@@ -15,6 +15,7 @@
  */
 package com.thesett.aima.logic.fol.wam.compiler;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -73,7 +74,7 @@ public class PositionAndOccurrenceVisitor extends BasePositionalVisitor
     private final Map<Integer, List<SymbolKey>> constants = new HashMap<Integer, List<SymbolKey>>();
 
     /** Holds a set of all constants found to be in argument positions. */
-    private final Set<Integer> argumentConstants = new HashSet<Integer>();
+    private final Collection<Integer> argumentConstants = new HashSet<Integer>();
 
     /**
      * Creates a positional visitor.

@@ -15,6 +15,7 @@
  */
 package com.thesett.aima.logic.fol.wam.compiler;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ import java.util.List;
 public class WAMReservedLabel extends WAMCallPoint
 {
     /** The list of referenced from addresses. */
-    public List<Integer> referenceList = new LinkedList<Integer>();
+    public Collection<Integer> referenceList = new LinkedList<Integer>();
 
     /**
      * Creates a call table entry for the code with the specified entry address and length.

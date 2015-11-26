@@ -224,7 +224,7 @@ public abstract class L0UnifyingMachine extends L0BaseMachine implements Unifier
             }
 
             // Create a new functor to hold the decoded data.
-            Functor functor = new Functor(f, arguments);
+            Term functor = new Functor(f, arguments);
 
             result = functor;
         }

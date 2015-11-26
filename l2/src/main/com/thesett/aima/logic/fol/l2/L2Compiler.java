@@ -15,6 +15,7 @@
  */
 package com.thesett.aima.logic.fol.l2;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -42,12 +43,14 @@ import static com.thesett.aima.logic.fol.l2.L2Instruction.L2InstructionSet;
 import static com.thesett.aima.logic.fol.l2.L2Instruction.REG_ADDR;
 import static com.thesett.aima.logic.fol.l2.L2Instruction.STACK_ADDR;
 import com.thesett.aima.search.QueueBasedSearchMethod;
+import com.thesett.aima.search.SearchMethod;
 import com.thesett.aima.search.util.Searches;
 import com.thesett.aima.search.util.backtracking.DepthFirstBacktrackingSearch;
 import com.thesett.aima.search.util.uninformed.BreadthFirstSearch;
 import com.thesett.aima.search.util.uninformed.PostFixSearch;
 import com.thesett.common.parsing.SourceCodeException;
 import com.thesett.common.util.SizeableLinkedList;
+import com.thesett.common.util.SizeableList;
 import com.thesett.common.util.doublemaps.SymbolTable;
 
 /**
@@ -182,7 +185,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
     private LogicCompilerObserver<L2CompiledClause, L2CompiledClause> observer;
 
     /** This is used to keep track of registers as they are seen. */
-    private Set<Integer> seenRegisters = new TreeSet<Integer>();
+    private Collection<Integer> seenRegisters = new TreeSet<Integer>();
 
     /**
      * Used to keep track of the last used register assignment accross assignments to multiple functors within a clause.
@@ -227,8 +230,8 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
 
         // These are used to generate pre and post instructions for the clause, for example, for the creation and
         // clean-up of stack frames.
-        SizeableLinkedList<L2Instruction> preFixInstructions = new SizeableLinkedList<L2Instruction>();
-        SizeableLinkedList<L2Instruction> postFixInstructions = new SizeableLinkedList<L2Instruction>();
+        SizeableList<L2Instruction> preFixInstructions = new SizeableLinkedList<L2Instruction>();
+        SizeableList<L2Instruction> postFixInstructions = new SizeableLinkedList<L2Instruction>();
 
         // Extract the clause to compile from the parsed sentence.
         Clause clause = sentence.getT();
@@ -356,7 +359,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
      *
      * @param clause The clause to initialise the symbol keys of.
      */
-    private void initialiseSymbolTable(Clause clause)
+    private void initialiseSymbolTable(Term clause)
     {
         // Run the symbol key traverser over the clause, to ensure that all terms have their symbol keys correctly
         // set up.
@@ -388,7 +391,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
 
         // Program instructions are generated in the same order as the registers are assigned, the postfix
         // ordering used for queries is not needed.
-        QueueBasedSearchMethod<Term, Term> outInSearch = new BreadthFirstSearch<Term, Term>();
+        SearchMethod outInSearch = new BreadthFirstSearch<Term, Term>();
         outInSearch.reset();
         outInSearch.addStartState(expression);
 
@@ -463,7 +466,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
             }
             else if (j < numOutermostArgs)
             {
-                Variable nextFunctor = (Variable) nextTerm;
+                Term nextFunctor = (Variable) nextTerm;
                 int allocation = (Integer) symbolTable.get(nextFunctor.getSymbolKey(), "allocation");
                 byte addrMode = (byte) ((allocation & 0xff00) >> 8);
                 byte address = (byte) (allocation & 0xff);
@@ -559,7 +562,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
             // When a functor is encountered, output a put_struc.
             else if (nextOutermostArg.isFunctor())
             {
-                Functor nextFunctorArg = (Functor) nextOutermostArg;
+                Term nextFunctorArg = (Functor) nextOutermostArg;
 
                 // Heap cells are to be created in an order such that no heap cell can appear before other cells that it
                 // refers to. A postfix traversal of the functors in the term to compile is used to achieve this, as
@@ -663,12 +666,12 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
      *
      * @param expression The expression to walk over.
      */
-    private void allocateTemporaryRegisters(Functor expression /*, Map<Byte, Integer> varNames*/)
+    private void allocateTemporaryRegisters(Term expression /*, Map<Byte, Integer> varNames*/)
     {
         // Need to assign registers to the whole syntax tree, working in from the outermost functor. The outermost
         // functor itself is not assigned to a register in l2 (only in l0). Functors already directly assigned to
         // argument registers will not be re-assigned by this, variables as arguments will be assigned.
-        QueueBasedSearchMethod<Term, Term> outInSearch = new BreadthFirstSearch<Term, Term>();
+        SearchMethod outInSearch = new BreadthFirstSearch<Term, Term>();
         outInSearch.reset();
         outInSearch.addStartState(expression);
 
@@ -720,7 +723,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
         Map<Variable, Integer> variableCountBag = new TreeMap<Variable, Integer>();
 
         // Get the set of variables in the head and first clause body argument.
-        Set<Variable> firstGroupVariables = new TreeSet<Variable>();
+        Collection<Variable> firstGroupVariables = new TreeSet<Variable>();
 
         if (clause.getHead() != null)
         {
@@ -787,7 +790,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
      * @param clause   The clause to allocate registers for.
      * @param varNames A map of permanent variables to variable names to record the allocations in.
      */
-    private void allocatePermanentQueryRegisters(Clause clause, Map<Byte, Integer> varNames)
+    private void allocatePermanentQueryRegisters(Term clause, Map<Byte, Integer> varNames)
     {
         // Allocate local variable slots for all variables in a query.
         QueryRegisterAllocatingVisitor allocatingVisitor =
@@ -807,7 +810,7 @@ public class L2Compiler extends BaseMachine implements LogicCompiler<Clause, L2C
      *
      * @param clause The clause to pretty print.
      */
-    private void displayClause(Clause clause)
+    private void displayClause(Term clause)
     {
         // Pretty print the clause.
         StringBuffer prettyClause = new StringBuffer();
