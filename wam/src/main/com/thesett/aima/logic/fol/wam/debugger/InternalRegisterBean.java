@@ -37,11 +37,11 @@ import com.thesett.common.util.event.EventListenerSupport;
 public class InternalRegisterBean extends WAMInternalRegisters implements RegisterModel
 {
     /** Defines the names of the machine registers. */
-    public static final String[] REGISTER_NAMES =
+    private static final String[] REGISTER_NAMES =
         new String[] { "ip", "hp", "hbp", "sp", "up", "ep", "bp", "b0", "trp" };
 
     /** Defines the names of the machine flags. */
-    public static final String[] FLAG_NAMES = new String[] { "writeMode" };
+    private static final String[] FLAG_NAMES = new String[] { "writeMode" };
 
     /** Holds any property change listeners to notify of register value changes. */
     private final EventListenerSupport<PropertyChangeListener> listeners = new EventListenerSupport<PropertyChangeListener>();

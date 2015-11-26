@@ -37,7 +37,7 @@ import com.thesett.common.util.event.EventListenerSupport;
 public class InternalMemoryLayoutBean extends WAMMemoryLayout implements RegisterModel
 {
     /** Defines the names of the machine registers. */
-    public static final String[] REGISTER_NAMES =
+    private static final String[] REGISTER_NAMES =
         new String[]
         {
             "regBase", "regSize", "heapBase", "heapSize", "stackBase", "stackSize", "trailBase", "trailSize", "pdlBase",
