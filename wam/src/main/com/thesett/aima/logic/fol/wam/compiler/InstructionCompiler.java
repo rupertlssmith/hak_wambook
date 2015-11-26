@@ -194,7 +194,7 @@ public class InstructionCompiler extends DefaultBuiltIn
     protected int cutLevelVarSlot = -1;
 
     /** Keeps count of the current compiler scope, to keep symbols in each scope fresh. */
-    protected int scope = 0;
+    protected int scope;
 
     /** Holds the current nested compilation scope symbol table. */
     private SymbolTable<Integer, String, Object> scopeTable;

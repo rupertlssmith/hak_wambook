@@ -42,10 +42,10 @@ import com.thesett.common.error.ImplementationUnavailableException;
 public class L0UnifyingNativeMachine extends L0UnifyingMachine
 {
     /** Used to record whether the native implementation library was successfully loaded. */
-    private static boolean libraryFound = false;
+    private static boolean libraryFound;
 
     /** Used to record whether an attempt to load the native library has been made. */
-    private static boolean libraryLoadAttempted = false;
+    private static boolean libraryLoadAttempted;
 
     /**
      * Creates an instance of this machine, loading and checking for availability of the native implementation library

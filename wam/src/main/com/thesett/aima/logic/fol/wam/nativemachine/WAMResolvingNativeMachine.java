@@ -57,10 +57,10 @@ public class WAMResolvingNativeMachine extends WAMResolvingMachine
     private static final int CODE_SIZE = 10000;
 
     /** Used to record whether the native implementation library was successfully loaded. */
-    private static boolean libraryFound = false;
+    private static boolean libraryFound;
 
     /** Used to record whether an attempt to load the native library has been made. */
-    private static boolean libraryLoadAttempted = false;
+    private static boolean libraryLoadAttempted;
 
     /**
      * Creates a unifying virtual machine for WAM with default heap sizes.

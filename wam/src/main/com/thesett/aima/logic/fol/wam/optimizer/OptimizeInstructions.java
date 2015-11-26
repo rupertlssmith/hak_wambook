@@ -85,7 +85,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
     private final VariableAndFunctorInterner interner;
 
     /** Counts the number of void variables seen in a row. */
-    private int voidCount = 0;
+    private int voidCount;
 
     /**
      * Builds an instruction optimizer.

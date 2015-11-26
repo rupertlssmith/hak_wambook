@@ -43,7 +43,7 @@ public class WAMCompiledClause extends Clause<Functor>
     int label;
 
     /** Indicates that this has been added to a parent predicate already. */
-    private boolean addedToParent = false;
+    private boolean addedToParent;
 
     /**
      * Creates a clause within a parent predicate.
