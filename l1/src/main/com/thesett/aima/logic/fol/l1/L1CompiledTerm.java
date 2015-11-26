@@ -32,5 +32,5 @@ import com.thesett.aima.logic.fol.Term;
 public interface L1CompiledTerm extends Term
 {
     /** Decompiles the term. */
-    public void decompile();
+    void decompile();
 }

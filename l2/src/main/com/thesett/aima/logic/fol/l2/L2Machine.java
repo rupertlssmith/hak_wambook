@@ -42,7 +42,7 @@ public interface L2Machine extends VariableAndFunctorInterner
      *
      * @return The call point of the specified functor to call.
      */
-    public L2CallPoint resolveCallPoint(int functorName);
+    L2CallPoint resolveCallPoint(int functorName);
 
     /**
      * Adds compiled byte code to the code area of the machine.
@@ -54,7 +54,7 @@ public interface L2Machine extends VariableAndFunctorInterner
      *                          Implementations may elect to raise this as an error at the time the functor is added to
      *                          the machine, or during execution, or simply to fail to find a solution.
      */
-    public void emmitCode(L2CompiledClause clause) throws LinkageException;
+    void emmitCode(L2CompiledClause clause) throws LinkageException;
 
     /**
      * Extracts the binary byte code from the machine for a given call point.
@@ -63,5 +63,5 @@ public interface L2Machine extends VariableAndFunctorInterner
      *
      * @return The byte code at the specified location.
      */
-    public byte[] retrieveCode(L2CallPoint callPoint);
+    byte[] retrieveCode(L2CallPoint callPoint);
 }

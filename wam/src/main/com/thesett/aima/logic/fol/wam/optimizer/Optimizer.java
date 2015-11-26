@@ -38,5 +38,5 @@ public interface Optimizer
      *
      * @return An optimized instruction listing.
      */
-    public <T extends WAMOptimizeableListing> T apply(WAMOptimizeableListing listing);
+    <T extends WAMOptimizeableListing> T apply(WAMOptimizeableListing listing);
 }

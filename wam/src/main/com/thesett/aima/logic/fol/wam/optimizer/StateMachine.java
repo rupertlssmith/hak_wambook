@@ -34,7 +34,7 @@ public interface StateMachine<S, T>
      *
      * @param matcher The matcher that drives this state machine.
      */
-    public void setMatcher(Matcher<S, T> matcher);
+    void setMatcher(Matcher<S, T> matcher);
 
     /**
      * Accepts the next input from the matcher.

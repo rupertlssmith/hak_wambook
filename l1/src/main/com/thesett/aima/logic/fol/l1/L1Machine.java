@@ -36,7 +36,7 @@ public interface L1Machine extends VariableAndFunctorInterner
      * Resets the machine, to its initial state. This should clear any programs from the machine, and clear all of its
      * stacks and heaps.
      */
-    public abstract void reset();
+    void reset();
 
     /**
      * Adds compiled byte code to the code area of the machine.
@@ -49,7 +49,7 @@ public interface L1Machine extends VariableAndFunctorInterner
      *
      * @return The call table entry for the functors code within the code area of the machine.
      */
-    public L1CallTableEntry addCode(byte[] code, int start, int end, int functorName, boolean isQuery);
+    L1CallTableEntry addCode(byte[] code, int start, int end, int functorName, boolean isQuery);
 
     /**
      * Looks up the offset of the start of the code for the named functor.
@@ -59,7 +59,7 @@ public interface L1Machine extends VariableAndFunctorInterner
      * @return The call table entry of the functors code within the code area of the machine, or <tt>null</tt> if the
      *         functor is not known to the machine.
      */
-    public L1CallTableEntry getCodeAddress(int functorName);
+    L1CallTableEntry getCodeAddress(int functorName);
 
     /**
      * Extracts the raw byte code from the machine for a given call table entry.
@@ -68,5 +68,5 @@ public interface L1Machine extends VariableAndFunctorInterner
      *
      * @return The byte code at the specified location.
      */
-    public byte[] getByteCode(L1CallTableEntry callTableEntry);
+    byte[] getByteCode(L1CallTableEntry callTableEntry);
 }

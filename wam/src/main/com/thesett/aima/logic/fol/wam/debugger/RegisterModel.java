@@ -33,14 +33,14 @@ public interface RegisterModel
      *
      * @return A list of all of the registers in the machine.
      */
-    public String[] getRegisterNames();
+    String[] getRegisterNames();
 
     /**
      * Provides a list of all of the flags in the machine.
      *
      * @return A list of all of the flags in the machine.
      */
-    public String[] getFlagNames();
+    String[] getFlagNames();
 
     /**
      * Provides the number of bytes that a register occupies.
@@ -49,7 +49,7 @@ public interface RegisterModel
      *
      * @return The number of bytes that a register occupies.
      */
-    public int getRegisterSizeBytes(String name);
+    int getRegisterSizeBytes(String name);
 
     /**
      * Provides the contents of a register.
@@ -58,7 +58,7 @@ public interface RegisterModel
      *
      * @return The registers value.
      */
-    public byte[] getRegister(String name);
+    byte[] getRegister(String name);
 
     /**
      * Gets the status of a flag.
@@ -67,5 +67,5 @@ public interface RegisterModel
      *
      * @return The flags name.
      */
-    public boolean getFlag(String name);
+    boolean getFlag(String name);
 }
