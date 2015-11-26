@@ -44,7 +44,7 @@ public class InternalRegisterBean extends WAMInternalRegisters implements Regist
     public static final String[] FLAG_NAMES = new String[] { "writeMode" };
 
     /** Holds any property change listeners to notify of register value changes. */
-    private EventListenerSupport<PropertyChangeListener> listeners = new EventListenerSupport<PropertyChangeListener>();
+    private final EventListenerSupport<PropertyChangeListener> listeners = new EventListenerSupport<PropertyChangeListener>();
 
     /**
      * Creates an instance of the WAM machine internal register file and flags.

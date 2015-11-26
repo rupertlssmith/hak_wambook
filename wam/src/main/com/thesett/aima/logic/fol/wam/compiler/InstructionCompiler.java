@@ -196,7 +196,7 @@ public class InstructionCompiler extends DefaultBuiltIn
     private SymbolTable<Integer, String, Object> scopeTable;
 
     /** Holds the instruction optimizer. */
-    private Optimizer optimizer;
+    private final Optimizer optimizer;
 
     /**
      * Creates a new InstructionCompiler.

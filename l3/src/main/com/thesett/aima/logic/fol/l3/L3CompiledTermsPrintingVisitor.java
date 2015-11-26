@@ -53,13 +53,13 @@ public abstract class L3CompiledTermsPrintingVisitor extends DelegatingAllTermsV
     protected PositionalTermTraverser traverser;
 
     /** The name interner. */
-    private VariableAndFunctorInterner interner;
+    private final VariableAndFunctorInterner interner;
 
     /** The symbol table. */
-    private SymbolTable<Integer, String, Object> symbolTable;
+    private final SymbolTable<Integer, String, Object> symbolTable;
 
     /** Holds the string buffer to pretty print the results into. */
-    private StringBuffer result;
+    private final StringBuffer result;
 
     /** Holds a table with cell data to pretty print. */
     DoubleKeyedMap<Long, Long, String> grid = new HashMapXY<String>(10);

@@ -53,7 +53,7 @@ public class BasePrinter extends BasePositionalVisitor
     protected String indent = "";
 
     /** The grid of cells to output to. */
-    private TextTableModel table;
+    private final TextTableModel table;
 
     /**
      * Creates a printer.

@@ -40,7 +40,7 @@ import com.thesett.common.util.ReflectionUtils;
 public class BuiltInTransform implements Function<Functor, Functor>
 {
     /** Holds a mapping from functor names to built-in implementations. */
-    private Map<FunctorName, Class<? extends BuiltInFunctor>> builtIns =
+    private final Map<FunctorName, Class<? extends BuiltInFunctor>> builtIns =
         new HashMap<FunctorName, Class<? extends BuiltInFunctor>>();
 
     /** Holds the default built in, for standard compilation and interners and symbol tables. */

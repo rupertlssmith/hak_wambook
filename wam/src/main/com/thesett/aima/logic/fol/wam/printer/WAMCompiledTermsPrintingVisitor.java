@@ -54,13 +54,13 @@ public abstract class WAMCompiledTermsPrintingVisitor extends DelegatingAllTerms
     protected PositionalTermTraverser traverser;
 
     /** The name interner. */
-    private VariableAndFunctorInterner interner;
+    private final VariableAndFunctorInterner interner;
 
     /** The symbol table. */
-    private SymbolTable<Integer, String, Object> symbolTable;
+    private final SymbolTable<Integer, String, Object> symbolTable;
 
     /** Holds the string buffer to pretty print the results into. */
-    private StringBuffer result;
+    private final StringBuffer result;
 
     /** Holds a list of all column printers to apply. */
     List<AllTermsVisitor> printers = new ArrayList<AllTermsVisitor>();

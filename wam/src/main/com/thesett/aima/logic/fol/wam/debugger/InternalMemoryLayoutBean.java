@@ -48,7 +48,7 @@ public class InternalMemoryLayoutBean extends WAMMemoryLayout implements Registe
     public static final String[] FLAG_NAMES = new String[] {};
 
     /** Holds any property change listeners to notify of register value changes. */
-    private EventListenerSupport<PropertyChangeListener> listeners = new EventListenerSupport<PropertyChangeListener>();
+    private final EventListenerSupport<PropertyChangeListener> listeners = new EventListenerSupport<PropertyChangeListener>();
 
     /**
      * Creates an instance of the WAM memory layout.

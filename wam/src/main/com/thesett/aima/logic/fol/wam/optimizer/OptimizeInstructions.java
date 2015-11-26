@@ -74,7 +74,7 @@ public class OptimizeInstructions implements StateMachine<WAMInstruction, WAMIns
     private State state = State.NM;
 
     /** Holds a buffer of pending instructions to output. */
-    private LinkedList<WAMInstruction> buffer = new LinkedList<WAMInstruction>();
+    private final LinkedList<WAMInstruction> buffer = new LinkedList<WAMInstruction>();
 
     /** The symbol table. */
     protected final SymbolTable<Integer, String, Object> symbolTable;

@@ -70,10 +70,10 @@ public class PositionAndOccurrenceVisitor extends BasePositionalVisitor
     private Functor topLevelBodyFunctor;
 
     /** Holds a set of all constants encountered. */
-    private Map<Integer, List<SymbolKey>> constants = new HashMap<Integer, List<SymbolKey>>();
+    private final Map<Integer, List<SymbolKey>> constants = new HashMap<Integer, List<SymbolKey>>();
 
     /** Holds a set of all constants found to be in argument positions. */
-    private Set<Integer> argumentConstants = new HashSet<Integer>();
+    private final Set<Integer> argumentConstants = new HashSet<Integer>();
 
     /**
      * Creates a positional visitor.

@@ -52,7 +52,7 @@ public class L0UnifyingJavaMachine extends L0UnifyingMachine
     private static final int USTACK_SIZE = 1000;
 
     /** Holds the working heap. */
-    private int[] heap;
+    private final int[] heap;
 
     /** Holds the heap pointer. */
     private int hp;
@@ -61,7 +61,7 @@ public class L0UnifyingJavaMachine extends L0UnifyingMachine
     private int sp;
 
     /** Holds the unification stack. */
-    private int[] ustack;
+    private final int[] ustack;
 
     /** Holds the unification stack pointer. */
     private int up = -1;

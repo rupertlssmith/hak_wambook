@@ -53,7 +53,7 @@ public class PreCompiler extends BaseMachine implements LogicCompiler<Clause, Cl
     private final DefaultBuiltIn defaultBuiltIn;
 
     /** Holds the built in transformation. */
-    private BuiltInTransform builtInTransform;
+    private final BuiltInTransform builtInTransform;
 
     /**
      * Creates a new PreCompiler.

@@ -69,10 +69,10 @@ public class BasePrinter implements AllTermsVisitor
     protected PositionalTermTraverser traverser;
 
     /** The grid of cells to output to. */
-    private DoubleKeyedMap<Long, Long, String> grid;
+    private final DoubleKeyedMap<Long, Long, String> grid;
 
     /** The grid of cells to output to. */
-    private PrintingTable table;
+    private final PrintingTable table;
 
     /**
      * Creates a printer.
