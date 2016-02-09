@@ -28,6 +28,7 @@
         <url>https://github.com/rupertlssmith/lojix</url>
     </scm>
 
+    <!--
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -37,14 +38,21 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-
-        <!-- Set up for locally generated site. -->
-        <site>
-            <id>All_Projects_Site</id>
-            <name>All Projects Site</name>
-            <url>file:/var/www/build_reports/lojix</url>
-        </site>
-    </distributionManagement>    
+    </distributionManagement>
+    -->
+    
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Releases</name>
+            <url>http://localhost:9005/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Snapshots</name>
+            <url>http://localhost:9005/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -150,6 +158,16 @@
         <pluginManagement>
             <plugins>
 
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <configuration>
+                        <includes>
+                            <include>com.thesett:*</include>
+                        </includes>
+                    </configuration>
+                </plugin>
+                
                 <!-- Ensures the compiler plugin is set up for Java 1.5 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
